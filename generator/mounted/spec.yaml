@@ -1,0 +1,8 @@
+templateDir: /mounted/templates
+files:
+  api.mustache:
+    templateType: API
+    destinationFilename: .py
+  rest.mustache:
+    templateType: SupportingFiles
+    destinationFilename: occam_sdk/rest.py
