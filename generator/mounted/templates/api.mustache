@@ -12,7 +12,7 @@ from typing_extensions import Annotated
 
 from {{packageName}}.api_client import ApiClient, RequestSerialized
 from {{packageName}}.api_response import ApiResponse
-from {{packageName}}.rest import RESTResponseType, auto_fill_args
+from {{packageName}}.rest import RESTResponseType, auto_fill_args, callback_on_exception
 
 
 {{#operations}}
@@ -40,6 +40,7 @@ class {{classname}}:
 
 {{#operation}}
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     {{#asyncio}}async {{/asyncio}}def operation_id_{{operationId}}{{>partial_api_args}} -> {{{returnType}}}{{^returnType}}None{{/returnType}}:

@@ -3,6 +3,9 @@ files:
   api.mustache:
     templateType: API
     destinationFilename: .py
+  api_client.mustache:
+    templateType: SupportingFiles
+    destinationFilename: occam_sdk/api_client.py
   rest.mustache:
     templateType: SupportingFiles
     destinationFilename: occam_sdk/rest.py
