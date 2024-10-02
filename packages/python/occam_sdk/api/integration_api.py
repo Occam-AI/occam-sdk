@@ -28,7 +28,7 @@ from occam_sdk.models.uuid_response import UUIDResponse
 
 from occam_sdk.api_client import ApiClient, RequestSerialized
 from occam_sdk.api_response import ApiResponse
-from occam_sdk.rest import RESTResponseType, auto_fill_args
+from occam_sdk.rest import RESTResponseType, auto_fill_args, callback_on_exception
 
 
 class IntegrationApi:
@@ -54,6 +54,7 @@ class IntegrationApi:
         return self._parameters
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def credential_credentials_post(
@@ -200,6 +201,7 @@ class IntegrationApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def credential_credentials_uuid_delete(
@@ -333,6 +335,7 @@ class IntegrationApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def connector_schemas_connectors_schemas_get(
@@ -458,6 +461,7 @@ class IntegrationApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def oauth_end_integrations_oauth_google_end_get(
@@ -600,6 +604,7 @@ class IntegrationApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def oauth_end_integrations_oauth_isolated_end_get(
@@ -734,6 +739,7 @@ class IntegrationApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def confirm_integrations_merge_confirm_post(
@@ -879,6 +885,7 @@ class IntegrationApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def link_token_integrations_merge_link_token_get(
@@ -1013,6 +1020,7 @@ class IntegrationApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def end_integrations_oauth_end_get(
@@ -1155,6 +1163,7 @@ class IntegrationApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def start_integrations_oauth_start_get(
@@ -1298,6 +1307,7 @@ class IntegrationApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def file_credentials_fileupload_post(

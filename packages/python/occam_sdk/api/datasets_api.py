@@ -28,7 +28,7 @@ from occam_sdk.models.uuid_response import UUIDResponse
 
 from occam_sdk.api_client import ApiClient, RequestSerialized
 from occam_sdk.api_response import ApiResponse
-from occam_sdk.rest import RESTResponseType, auto_fill_args
+from occam_sdk.rest import RESTResponseType, auto_fill_args, callback_on_exception
 
 
 class DatasetsApi:
@@ -54,6 +54,7 @@ class DatasetsApi:
         return self._parameters
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def add(
@@ -208,6 +209,7 @@ class DatasetsApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def allowed_schemas(
@@ -341,6 +343,7 @@ class DatasetsApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def delete(
@@ -481,6 +484,7 @@ class DatasetsApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def get(
@@ -621,6 +625,7 @@ class DatasetsApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def list(
@@ -754,6 +759,7 @@ class DatasetsApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def update(

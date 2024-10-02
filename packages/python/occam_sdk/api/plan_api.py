@@ -24,7 +24,7 @@ from occam_sdk.models.plan_simulation_params import PlanSimulationParams
 
 from occam_sdk.api_client import ApiClient, RequestSerialized
 from occam_sdk.api_response import ApiResponse
-from occam_sdk.rest import RESTResponseType, auto_fill_args
+from occam_sdk.rest import RESTResponseType, auto_fill_args, callback_on_exception
 
 
 class PlanApi:
@@ -50,6 +50,7 @@ class PlanApi:
         return self._parameters
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def goal_plans_goal_post(
@@ -203,6 +204,7 @@ class PlanApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def plan_graph_plans_post(
@@ -345,6 +347,7 @@ class PlanApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def goal_plans_goal_goal_id_get(
@@ -476,6 +479,7 @@ class PlanApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def user_plans_plans_user_user_uuid_get(
@@ -607,6 +611,7 @@ class PlanApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def plan_plans_plan_id_modify_post(
@@ -738,6 +743,7 @@ class PlanApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def plans_ping_get(
@@ -861,6 +867,7 @@ class PlanApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def status_plans_plan_id_status_get(
@@ -1001,6 +1008,7 @@ class PlanApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def plan_plans_plan_id_run_post(
@@ -1132,6 +1140,7 @@ class PlanApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def plan_plans_plan_id_test_post(
@@ -1283,6 +1292,7 @@ class PlanApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def goal_plans_goal_goal_id_update_post(

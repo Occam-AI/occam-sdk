@@ -282,3 +282,14 @@ def auto_fill_args(func):
         return func(*bound_args.args, **bound_args.kwargs)
     
     return wrapper
+
+
+def callback_on_exception(func):
+    @wraps(func)
+    def wrapper(self, *args, **kwargs):
+        try:
+            return func(self, *args, **kwargs)
+        except Exception as e:
+            if self.api_client.callback_on_exception is not None:
+                return self.api_client.callback_on_exception(e, lambda: func(self, *args, **kwargs))            
+    return wrapper

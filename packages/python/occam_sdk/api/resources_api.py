@@ -35,7 +35,7 @@ from occam_sdk.models.update_user_resource_request import UpdateUserResourceRequ
 
 from occam_sdk.api_client import ApiClient, RequestSerialized
 from occam_sdk.api_response import ApiResponse
-from occam_sdk.rest import RESTResponseType, auto_fill_args
+from occam_sdk.rest import RESTResponseType, auto_fill_args, callback_on_exception
 
 
 class ResourcesApi:
@@ -61,6 +61,7 @@ class ResourcesApi:
         return self._parameters
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def credential_credentials_post(
@@ -207,6 +208,7 @@ class ResourcesApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def credential_credentials_uuid_delete(
@@ -340,6 +342,7 @@ class ResourcesApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def add_datasource(
@@ -495,6 +498,7 @@ class ResourcesApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def connect(
@@ -657,6 +661,7 @@ class ResourcesApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def datasource_schemas(
@@ -781,6 +786,7 @@ class ResourcesApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def delete_connection(
@@ -927,6 +933,7 @@ class ResourcesApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def get(
@@ -1069,6 +1076,7 @@ class ResourcesApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def list(
@@ -1204,6 +1212,7 @@ class ResourcesApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def list_files(
@@ -1346,6 +1355,7 @@ class ResourcesApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def refresh(
@@ -1492,6 +1502,7 @@ class ResourcesApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def schema(
@@ -1627,6 +1638,7 @@ class ResourcesApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def schemas(
@@ -1751,6 +1763,7 @@ class ResourcesApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def tool_schemas(
@@ -1875,6 +1888,7 @@ class ResourcesApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def update(
@@ -2028,6 +2042,7 @@ class ResourcesApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def file_credentials_fileupload_post(

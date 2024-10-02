@@ -109,18 +109,31 @@ class OccamClient:
         self.api_key = api_key
         self.base_url = base_url
 
+    def refresh_token(self):
+        response = AuthApi(self._api_client).token_from_key(key=self.api_key)
+
+        # set the access token in the api client as Authorization Bearer
+        self._api_client.set_default_header("Authorization", f"Bearer {response.access_token}")
+
+    
     @property
     def api_client(self) -> ApiClient:
         # todo: handle refresh on expired access token
         if self._api_client is None:
             config = Configuration(host=self.base_url)
             self._api_client = ApiClient(config)
-            auth_api = AuthApi(self._api_client)
-            response = auth_api.token_from_key(key=self.api_key)
+            self.refresh_token()
 
-            # set the access token in the api client as Authorization Bearer
-            self._api_client.set_default_header("Authorization", f"Bearer {response.access_token}")
-
+            # setup the callback to refresh the token on expired access token
+            def refresh_on_expired_token(e: Exception, internal_call):
+                if isinstance(e, ApiException) and e.status == 401 and 'Token expired' in e.body:
+                    print("Refreshing token...")
+                    self.refresh_token() 
+                    return internal_call()
+                else:
+                    raise e
+                
+            self._api_client.callback_on_exception = refresh_on_expired_token
         return self._api_client
 
     def auth(self, **kwargs) -> AuthApi:

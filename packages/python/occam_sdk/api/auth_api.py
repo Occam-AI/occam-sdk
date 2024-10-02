@@ -25,7 +25,7 @@ from occam_sdk.models.refresh_token_request import RefreshTokenRequest
 
 from occam_sdk.api_client import ApiClient, RequestSerialized
 from occam_sdk.api_response import ApiResponse
-from occam_sdk.rest import RESTResponseType, auto_fill_args
+from occam_sdk.rest import RESTResponseType, auto_fill_args, callback_on_exception
 
 
 class AuthApi:
@@ -51,6 +51,7 @@ class AuthApi:
         return self._parameters
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def login(
@@ -231,6 +232,7 @@ class AuthApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def refresh(
@@ -377,6 +379,7 @@ class AuthApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def token_from_key(

@@ -25,7 +25,7 @@ from occam_sdk.models.visible_api_key_response import VisibleAPIKeyResponse
 
 from occam_sdk.api_client import ApiClient, RequestSerialized
 from occam_sdk.api_response import ApiResponse
-from occam_sdk.rest import RESTResponseType, auto_fill_args
+from occam_sdk.rest import RESTResponseType, auto_fill_args, callback_on_exception
 
 
 class KeyApi:
@@ -51,6 +51,7 @@ class KeyApi:
         return self._parameters
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def key_keys_put(
@@ -197,6 +198,7 @@ class KeyApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def key_keys_uuid_delete(
@@ -330,6 +332,7 @@ class KeyApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def key_usage_keys_uuid_usage_get(
@@ -463,6 +466,7 @@ class KeyApi:
 
 
 
+    @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
     def keys_keys_get(

@@ -23,7 +23,7 @@ import re
 import tempfile
 
 from urllib.parse import quote
-from typing import Tuple, Optional, List, Dict, Union
+from typing import Callable, Tuple, Optional, List, Dict, Union
 from pydantic import SecretStr
 
 from occam_sdk.configuration import Configuration
@@ -71,6 +71,7 @@ class ApiClient:
         'object': object,
     }
     _pool = None
+    callback_on_exception: Callable[[Exception, Callable], None] = None
 
     def __init__(
         self,
