@@ -42,7 +42,7 @@ class TestPlanGoal(unittest.TestCase):
                         content = null, 
                         role = 'assistant', 
                         name = '', 
-                        parsed = occam_sdk.models.base_model.BaseModel(), )
+                        parsed = null, )
                     ],
                 user_id = 56,
                 category = '',

@@ -17,7 +17,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
 from pydantic import Field, StrictStr, field_validator
-from typing import Optional
+from typing import Any, Optional
 from typing_extensions import Annotated
 from occam_sdk.models.access_and_refresh_token_response import AccessAndRefreshTokenResponse
 from occam_sdk.models.access_token_response import AccessTokenResponse
@@ -58,6 +58,7 @@ class AuthApi:
         self,
         username: StrictStr,
         password: StrictStr,
+        settings: Optional[Any] = None,
         grant_type: Optional[Annotated[str, Field(strict=True)]] = None,
         scope: Optional[StrictStr] = None,
         client_id: Optional[StrictStr] = None,
@@ -83,6 +84,8 @@ class AuthApi:
         :type username: str
         :param password: (required)
         :type password: str
+        :param settings:
+        :type settings: object
         :param grant_type:
         :type grant_type: str
         :param scope:
@@ -116,6 +119,7 @@ class AuthApi:
         _param = self._auth_login_serialize(
             username=username,
             password=password,
+            settings=settings,
             grant_type=grant_type,
             scope=scope,
             client_id=client_id,
@@ -146,6 +150,7 @@ class AuthApi:
         self,
         username,
         password,
+        settings,
         grant_type,
         scope,
         client_id,
@@ -172,6 +177,10 @@ class AuthApi:
 
         # process the path parameters
         # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
         # process the header parameters
         # process the form parameters
         if grant_type is not None:
@@ -238,6 +247,7 @@ class AuthApi:
     def refresh(
         self,
         refresh_token_request: RefreshTokenRequest,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -257,6 +267,8 @@ class AuthApi:
 
         :param refresh_token_request: (required)
         :type refresh_token_request: RefreshTokenRequest
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -281,6 +293,7 @@ class AuthApi:
 
         _param = self._auth_refresh_serialize(
             refresh_token_request=refresh_token_request,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -307,6 +320,7 @@ class AuthApi:
     def _auth_refresh_serialize(
         self,
         refresh_token_request,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -329,6 +343,10 @@ class AuthApi:
 
         # process the path parameters
         # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
@@ -385,6 +403,7 @@ class AuthApi:
     def token_from_key(
         self,
         key: StrictStr,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -404,6 +423,8 @@ class AuthApi:
 
         :param key: (required)
         :type key: str
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -428,6 +449,7 @@ class AuthApi:
 
         _param = self._auth_token_from_key_serialize(
             key=key,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -453,6 +475,7 @@ class AuthApi:
     def _auth_token_from_key_serialize(
         self,
         key,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -478,6 +501,10 @@ class AuthApi:
         if key is not None:
             
             _query_params.append(('key', key))
+            
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
             
         # process the header parameters
         # process the form parameters

@@ -17,7 +17,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
 from pydantic import StrictStr
-from typing import Any, List
+from typing import Any, List, Optional
 from occam_sdk.models.api_key_usage_response import APIKeyUsageResponse
 from occam_sdk.models.hidden_api_key_response import HiddenAPIKeyResponse
 from occam_sdk.models.put_api_key_request import PutAPIKeyRequest
@@ -57,6 +57,7 @@ class KeyApi:
     def key_keys_put(
         self,
         put_api_key_request: PutAPIKeyRequest,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -76,6 +77,8 @@ class KeyApi:
 
         :param put_api_key_request: (required)
         :type put_api_key_request: PutAPIKeyRequest
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -100,6 +103,7 @@ class KeyApi:
 
         _param = self._create_key_keys_put_serialize(
             put_api_key_request=put_api_key_request,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -125,6 +129,7 @@ class KeyApi:
     def _create_key_keys_put_serialize(
         self,
         put_api_key_request,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -147,6 +152,10 @@ class KeyApi:
 
         # process the path parameters
         # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
@@ -204,6 +213,7 @@ class KeyApi:
     def key_keys_uuid_delete(
         self,
         uuid: StrictStr,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -223,6 +233,8 @@ class KeyApi:
 
         :param uuid: (required)
         :type uuid: str
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -247,6 +259,7 @@ class KeyApi:
 
         _param = self._delete_key_keys_uuid_delete_serialize(
             uuid=uuid,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -272,6 +285,7 @@ class KeyApi:
     def _delete_key_keys_uuid_delete_serialize(
         self,
         uuid,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -296,6 +310,10 @@ class KeyApi:
         if uuid is not None:
             _path_params['uuid'] = uuid
         # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
@@ -338,6 +356,7 @@ class KeyApi:
     def key_usage_keys_uuid_usage_get(
         self,
         uuid: Any,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -357,6 +376,8 @@ class KeyApi:
 
         :param uuid: (required)
         :type uuid: object
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -381,6 +402,7 @@ class KeyApi:
 
         _param = self._get_key_usage_keys_uuid_usage_get_serialize(
             uuid=uuid,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -406,6 +428,7 @@ class KeyApi:
     def _get_key_usage_keys_uuid_usage_get_serialize(
         self,
         uuid,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -430,6 +453,10 @@ class KeyApi:
         if uuid is not None:
             _path_params['uuid'] = uuid
         # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
@@ -471,6 +498,7 @@ class KeyApi:
     @validate_call(config=ConfigDict(extra='ignore'))
     def keys_keys_get(
         self,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -488,6 +516,8 @@ class KeyApi:
 
         List API keys of the calling user
 
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -511,6 +541,7 @@ class KeyApi:
         """ # noqa: E501
 
         _param = self._list_keys_keys_get_serialize(
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -520,6 +551,7 @@ class KeyApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "List[HiddenAPIKeyResponse]",
             '401': None,
+            '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -534,6 +566,7 @@ class KeyApi:
 
     def _list_keys_keys_get_serialize(
         self,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -556,6 +589,10 @@ class KeyApi:
 
         # process the path parameters
         # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter

@@ -36,12 +36,16 @@ class TestUserResponse(unittest.TestCase):
         if include_optional:
             return UserResponse(
                 uuid = '',
-                email = ''
+                email = '',
+                name = '',
+                membership_type = 'free'
             )
         else:
             return UserResponse(
                 uuid = '',
                 email = '',
+                name = '',
+                membership_type = 'free',
         )
         """
 

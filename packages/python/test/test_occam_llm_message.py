@@ -38,7 +38,7 @@ class TestOccamLLMMessage(unittest.TestCase):
                 content = None,
                 role = 'assistant',
                 name = '',
-                parsed = occam_sdk.models.base_model.BaseModel()
+                parsed = None
             )
         else:
             return OccamLLMMessage(

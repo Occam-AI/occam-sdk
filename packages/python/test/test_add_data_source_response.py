@@ -39,8 +39,9 @@ class TestAddDataSourceResponse(unittest.TestCase):
                 kind = '',
                 kind_display_name = '',
                 instance_display_name = '',
-                short_description = '',
-                long_description = '',
+                kind_short_description = '',
+                kind_long_description = '',
+                description = '',
                 icon = '',
                 category = '',
                 category_rank = 56,
@@ -54,10 +55,12 @@ class TestAddDataSourceResponse(unittest.TestCase):
                     ''
                     ],
                 connection_uuid = '',
+                from_code = True,
                 is_template = True,
                 is_scannable = True,
                 is_template_instance = True,
                 credential_uuid = '',
+                credential_metadata = None,
                 datasets = [
                     occam_sdk.models.get_dataset_response.GetDatasetResponse(
                         uuid = '', 
@@ -65,7 +68,7 @@ class TestAddDataSourceResponse(unittest.TestCase):
                         content = occam_sdk.models.content.Content(), 
                         address_summary = '/temporary/placeholder', 
                         connection_status = 'is_template', 
-                        is_root = True, )
+                        description = '', )
                     ],
                 input_fields = [
                     occam_sdk.models.basic_field_info.BasicFieldInfo(
@@ -77,15 +80,16 @@ class TestAddDataSourceResponse(unittest.TestCase):
                     occam_sdk.models.basic_field_info.BasicFieldInfo(
                         name = '', 
                         required = True, )
-                    ]
+                    ],
+                access_name = ''
             )
         else:
             return AddDataSourceResponse(
                 uuid = '',
                 kind = '',
                 kind_display_name = '',
-                short_description = '',
-                long_description = '',
+                kind_short_description = '',
+                kind_long_description = '',
                 icon = '',
                 category = '',
                 category_rank = 56,

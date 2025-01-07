@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **category** | **str** |  | 
 **run_metrics** | [**RunMetrics**](RunMetrics.md) |  | 
 **status** | **str** |  | 
+**run_status** | **str** |  | 
 **organization** | [**GetOrganizationResponse**](GetOrganizationResponse.md) |  | 
 
 ## Example

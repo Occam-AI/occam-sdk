@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 
 # **create_key_keys_put**
-> VisibleAPIKeyResponse create_key_keys_put(put_api_key_request)
+> VisibleAPIKeyResponse create_key_keys_put(put_api_key_request, settings=settings)
 
 Create Key
 
@@ -46,10 +46,11 @@ with occam_sdk.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = occam_sdk.KeyApi(api_client)
     put_api_key_request = occam_sdk.PutAPIKeyRequest() # PutAPIKeyRequest | 
+    settings = None # object |  (optional)
 
     try:
         # Create Key
-        api_response = api_instance.create_key_keys_put(put_api_key_request)
+        api_response = api_instance.create_key_keys_put(put_api_key_request, settings=settings)
         print("The response of KeyApi->create_key_keys_put:\n")
         pprint(api_response)
     except Exception as e:
@@ -64,6 +65,7 @@ with occam_sdk.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **put_api_key_request** | [**PutAPIKeyRequest**](PutAPIKeyRequest.md)|  | 
+ **settings** | [**object**](.md)|  | [optional] 
 
 ### Return type
 
@@ -89,7 +91,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **delete_key_keys_uuid_delete**
-> object delete_key_keys_uuid_delete(uuid)
+> object delete_key_keys_uuid_delete(uuid, settings=settings)
 
 Delete Key
 
@@ -122,10 +124,11 @@ with occam_sdk.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = occam_sdk.KeyApi(api_client)
     uuid = 'uuid_example' # str | 
+    settings = None # object |  (optional)
 
     try:
         # Delete Key
-        api_response = api_instance.delete_key_keys_uuid_delete(uuid)
+        api_response = api_instance.delete_key_keys_uuid_delete(uuid, settings=settings)
         print("The response of KeyApi->delete_key_keys_uuid_delete:\n")
         pprint(api_response)
     except Exception as e:
@@ -140,6 +143,7 @@ with occam_sdk.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **uuid** | **str**|  | 
+ **settings** | [**object**](.md)|  | [optional] 
 
 ### Return type
 
@@ -165,7 +169,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **get_key_usage_keys_uuid_usage_get**
-> APIKeyUsageResponse get_key_usage_keys_uuid_usage_get(uuid)
+> APIKeyUsageResponse get_key_usage_keys_uuid_usage_get(uuid, settings=settings)
 
 Get Key Usage
 
@@ -199,10 +203,11 @@ with occam_sdk.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = occam_sdk.KeyApi(api_client)
     uuid = None # object | 
+    settings = None # object |  (optional)
 
     try:
         # Get Key Usage
-        api_response = api_instance.get_key_usage_keys_uuid_usage_get(uuid)
+        api_response = api_instance.get_key_usage_keys_uuid_usage_get(uuid, settings=settings)
         print("The response of KeyApi->get_key_usage_keys_uuid_usage_get:\n")
         pprint(api_response)
     except Exception as e:
@@ -217,6 +222,7 @@ with occam_sdk.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **uuid** | [**object**](.md)|  | 
+ **settings** | [**object**](.md)|  | [optional] 
 
 ### Return type
 
@@ -242,7 +248,7 @@ Name | Type | Description  | Notes
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **list_keys_keys_get**
-> List[HiddenAPIKeyResponse] list_keys_keys_get()
+> List[HiddenAPIKeyResponse] list_keys_keys_get(settings=settings)
 
 List Keys
 
@@ -275,10 +281,11 @@ configuration.access_token = os.environ["ACCESS_TOKEN"]
 with occam_sdk.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = occam_sdk.KeyApi(api_client)
+    settings = None # object |  (optional)
 
     try:
         # List Keys
-        api_response = api_instance.list_keys_keys_get()
+        api_response = api_instance.list_keys_keys_get(settings=settings)
         print("The response of KeyApi->list_keys_keys_get:\n")
         pprint(api_response)
     except Exception as e:
@@ -289,7 +296,10 @@ with occam_sdk.ApiClient(configuration) as api_client:
 
 ### Parameters
 
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **settings** | [**object**](.md)|  | [optional] 
 
 ### Return type
 
@@ -310,6 +320,7 @@ This endpoint does not need any parameter.
 |-------------|-------------|------------------|
 **200** | Successful Response |  -  |
 **401** | No &#x60;Authorization&#x60; access token header, token is invalid or user removed |  -  |
+**422** | Validation Error |  -  |
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 

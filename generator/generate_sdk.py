@@ -15,7 +15,8 @@ class OccamClient:
     _resources: ResourcesApi = None
     _user: UserApi = None
     _api_client: ApiClient = None
-    _datasets: DatasetsApi = None
+    _agents: AgentsApi = None
+    #_datasets: DatasetsApi = None
 
     def __init__(self, api_key: str, base_url: str = 'https://api.occam.ai'):
         self.api_key = api_key
@@ -106,15 +107,22 @@ class OccamClient:
             self._user._parameters = kwargs
         return self._user
 
-    def datasets(self, resource_uuid: str | None = None, **kwargs) -> DatasetsApi:
-        # resource_uuid is added only for type-hinting purposes (since kwargs gives no info)
-        if resource_uuid is not None:
-            kwargs['resource_uuid'] = resource_uuid
-        if self._datasets is None:
-            self._datasets = DatasetsApi(self.api_client, **kwargs)
+    def agents(self, **kwargs) -> AgentsApi:
+        if self._agents is None:
+            self._agents = AgentsApi(self.api_client, **kwargs)
         elif kwargs:
-            self._datasets._parameters = kwargs
-        return self._datasets
+            self._agents._parameters = kwargs
+        return self._agents
+
+    # def datasets(self, resource_uuid: str | None = None, **kwargs) -> DatasetsApi:
+    #     # resource_uuid is added only for type-hinting purposes (since kwargs gives no info)
+    #     if resource_uuid is not None:
+    #         kwargs['resource_uuid'] = resource_uuid
+    #     if self._datasets is None:
+    #         self._datasets = DatasetsApi(self.api_client, **kwargs)
+    #     elif kwargs:
+    #         self._datasets._parameters = kwargs
+    #     return self._datasets
 
 """
 

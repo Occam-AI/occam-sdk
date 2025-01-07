@@ -35,8 +35,9 @@ class GetUserPlanResponse(BaseModel):
     category: Optional[StrictStr]
     run_metrics: RunMetrics
     status: StrictStr
+    run_status: StrictStr
     organization: GetOrganizationResponse
-    __properties: ClassVar[List[str]] = ["id", "name", "date", "category", "run_metrics", "status", "organization"]
+    __properties: ClassVar[List[str]] = ["id", "name", "date", "category", "run_metrics", "status", "run_status", "organization"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -106,6 +107,7 @@ class GetUserPlanResponse(BaseModel):
             "category": obj.get("category"),
             "run_metrics": RunMetrics.from_dict(obj["run_metrics"]) if obj.get("run_metrics") is not None else None,
             "status": obj.get("status"),
+            "run_status": obj.get("run_status"),
             "organization": GetOrganizationResponse.from_dict(obj["organization"]) if obj.get("organization") is not None else None
         })
         return _obj

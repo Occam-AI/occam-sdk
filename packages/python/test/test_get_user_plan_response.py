@@ -45,6 +45,7 @@ class TestGetUserPlanResponse(unittest.TestCase):
                     success_rate = 1.337, 
                     metrics_are_estimates = True, ),
                 status = '',
+                run_status = '',
                 organization = occam_sdk.models.get_organization_response.GetOrganizationResponse(
                     name = '', )
             )
@@ -60,6 +61,7 @@ class TestGetUserPlanResponse(unittest.TestCase):
                     success_rate = 1.337, 
                     metrics_are_estimates = True, ),
                 status = '',
+                run_status = '',
                 organization = occam_sdk.models.get_organization_response.GetOrganizationResponse(
                     name = '', ),
         )

@@ -16,11 +16,14 @@ from pydantic import validate_call, Field, StrictFloat, StrictStr, StrictInt, Co
 from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
+from datetime import datetime
 from pydantic import StrictStr
 from typing import Any, List, Optional
 from occam_sdk.models.get_user_plan_response import GetUserPlanResponse
+from occam_sdk.models.modifications_batch import ModificationsBatch
 from occam_sdk.models.plan_goal import PlanGoal
-from occam_sdk.models.plan_simulation_params import PlanSimulationParams
+from occam_sdk.models.request_agent_modifications_model import RequestAgentModificationsModel
+from occam_sdk.models.user_message_model import UserMessageModel
 
 from occam_sdk.api_client import ApiClient, RequestSerialized
 from occam_sdk.api_response import ApiResponse
@@ -57,6 +60,7 @@ class PlanApi:
         self,
         user_uuid: StrictStr,
         plan_goal: PlanGoal,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -77,6 +81,8 @@ class PlanApi:
         :type user_uuid: str
         :param plan_goal: (required)
         :type plan_goal: PlanGoal
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -102,6 +108,7 @@ class PlanApi:
         _param = self._create_goal_plans_goal_post_serialize(
             user_uuid=user_uuid,
             plan_goal=plan_goal,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -128,6 +135,7 @@ class PlanApi:
         self,
         user_uuid,
         plan_goal,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -153,6 +161,10 @@ class PlanApi:
         if user_uuid is not None:
             
             _query_params.append(('user_uuid', user_uuid))
+            
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
             
         # process the header parameters
         # process the form parameters
@@ -211,6 +223,7 @@ class PlanApi:
         self,
         goal_id: StrictStr,
         user_uuid: StrictStr,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -231,6 +244,8 @@ class PlanApi:
         :type goal_id: str
         :param user_uuid: (required)
         :type user_uuid: str
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -256,6 +271,7 @@ class PlanApi:
         _param = self._create_plan_graph_plans_post_serialize(
             goal_id=goal_id,
             user_uuid=user_uuid,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -282,6 +298,7 @@ class PlanApi:
         self,
         goal_id,
         user_uuid,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -311,6 +328,10 @@ class PlanApi:
         if user_uuid is not None:
             
             _query_params.append(('user_uuid', user_uuid))
+            
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
             
         # process the header parameters
         # process the form parameters
@@ -485,6 +506,7 @@ class PlanApi:
     def user_plans_plans_user_user_uuid_get(
         self,
         user_uuid: StrictStr,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -503,6 +525,8 @@ class PlanApi:
 
         :param user_uuid: (required)
         :type user_uuid: str
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -527,6 +551,7 @@ class PlanApi:
 
         _param = self._get_user_plans_plans_user_user_uuid_get_serialize(
             user_uuid=user_uuid,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -552,6 +577,7 @@ class PlanApi:
     def _get_user_plans_plans_user_user_uuid_get_serialize(
         self,
         user_uuid,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -576,6 +602,10 @@ class PlanApi:
         if user_uuid is not None:
             _path_params['user_uuid'] = user_uuid
         # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
@@ -614,7 +644,7 @@ class PlanApi:
     @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
-    def plan_plans_plan_id_modify_post(
+    def plan_run_plans_plan_id_run_pause_post(
         self,
         plan_id: StrictStr,
         _request_timeout: Union[
@@ -630,7 +660,7 @@ class PlanApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> object:
-        """Modify Plan
+        """Pause Plan Run
 
 
         :param plan_id: (required)
@@ -657,7 +687,7 @@ class PlanApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._modify_plan_plans_plan_id_modify_post_serialize(
+        _param = self._pause_plan_run_plans_plan_id_run_pause_post_serialize(
             plan_id=plan_id,
             _request_auth=_request_auth,
             _content_type=_content_type,
@@ -681,7 +711,7 @@ class PlanApi:
         ).data
 
 
-    def _modify_plan_plans_plan_id_modify_post_serialize(
+    def _pause_plan_run_plans_plan_id_run_pause_post_serialize(
         self,
         plan_id,
         _request_auth,
@@ -728,7 +758,7 @@ class PlanApi:
 
         return self.api_client.param_serialize(
             method='POST',
-            resource_path='/plans/{plan_id}/modify',
+            resource_path='/plans/{plan_id}/run/pause',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
@@ -870,10 +900,9 @@ class PlanApi:
     @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
-    def status_plans_plan_id_status_get(
+    def generation_detail_plans_plan_id_generation_detail_get(
         self,
         plan_id: StrictStr,
-        detail: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -887,13 +916,11 @@ class PlanApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> object:
-        """Plan Status
+        """Plan Generation Detail
 
 
         :param plan_id: (required)
         :type plan_id: str
-        :param detail:
-        :type detail: PlanStatusDetail
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -916,9 +943,8 @@ class PlanApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._plan_status_plans_plan_id_status_get_serialize(
+        _param = self._plan_generation_detail_plans_plan_id_generation_detail_get_serialize(
             plan_id=plan_id,
-            detail=detail,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -941,10 +967,9 @@ class PlanApi:
         ).data
 
 
-    def _plan_status_plans_plan_id_status_get_serialize(
+    def _plan_generation_detail_plans_plan_id_generation_detail_get_serialize(
         self,
         plan_id,
-        detail,
         _request_auth,
         _content_type,
         _headers,
@@ -969,10 +994,6 @@ class PlanApi:
         if plan_id is not None:
             _path_params['plan_id'] = plan_id
         # process the query parameters
-        if detail is not None:
-            
-            _query_params.append(('detail', detail.value))
-            
         # process the header parameters
         # process the form parameters
         # process the body parameter
@@ -993,7 +1014,7 @@ class PlanApi:
 
         return self.api_client.param_serialize(
             method='GET',
-            resource_path='/plans/{plan_id}/status',
+            resource_path='/plans/{plan_id}/generation/detail',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
@@ -1011,7 +1032,7 @@ class PlanApi:
     @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
-    def plan_plans_plan_id_run_post(
+    def generation_status_plans_plan_id_generation_status_get(
         self,
         plan_id: StrictStr,
         _request_timeout: Union[
@@ -1027,7 +1048,7 @@ class PlanApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> object:
-        """Run Plan
+        """Plan Generation Status
 
 
         :param plan_id: (required)
@@ -1054,8 +1075,1184 @@ class PlanApi:
         :return: Returns the result object.
         """ # noqa: E501
 
+        _param = self._plan_generation_status_plans_plan_id_generation_status_get_serialize(
+            plan_id=plan_id,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "object",
+            '401': None,
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    def _plan_generation_status_plans_plan_id_generation_status_get_serialize(
+        self,
+        plan_id,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if plan_id is not None:
+            _path_params['plan_id'] = plan_id
+        # process the query parameters
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/plans/{plan_id}/generation/status',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+    @callback_on_exception
+    @auto_fill_args
+    @validate_call(config=ConfigDict(extra='ignore'))
+    def run_agent_updates_check_plans_plan_id_run_agent_updates_check_get(
+        self,
+        plan_id: StrictStr,
+        since: Optional[datetime] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> object:
+        """Plan Run Agent Updates Check
+
+
+        :param plan_id: (required)
+        :type plan_id: str
+        :param since:
+        :type since: datetime
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._plan_run_agent_updates_check_plans_plan_id_run_agent_updates_check_get_serialize(
+            plan_id=plan_id,
+            since=since,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "object",
+            '401': None,
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    def _plan_run_agent_updates_check_plans_plan_id_run_agent_updates_check_get_serialize(
+        self,
+        plan_id,
+        since,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if plan_id is not None:
+            _path_params['plan_id'] = plan_id
+        # process the query parameters
+        if since is not None:
+            if isinstance(since, datetime):
+                _query_params.append(
+                    (
+                        'since',
+                        since.strftime(
+                            self.api_client.configuration.datetime_format
+                        )
+                    )
+                )
+            else:
+                _query_params.append(('since', since))
+            
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/plans/{plan_id}/run/agent_updates/check',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+    @callback_on_exception
+    @auto_fill_args
+    @validate_call(config=ConfigDict(extra='ignore'))
+    def run_agent_updates_plans_plan_id_run_agent_updates_get(
+        self,
+        plan_id: StrictStr,
+        since: Optional[datetime] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> object:
+        """Plan Run Agent Updates
+
+
+        :param plan_id: (required)
+        :type plan_id: str
+        :param since:
+        :type since: datetime
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._plan_run_agent_updates_plans_plan_id_run_agent_updates_get_serialize(
+            plan_id=plan_id,
+            since=since,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "object",
+            '401': None,
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    def _plan_run_agent_updates_plans_plan_id_run_agent_updates_get_serialize(
+        self,
+        plan_id,
+        since,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if plan_id is not None:
+            _path_params['plan_id'] = plan_id
+        # process the query parameters
+        if since is not None:
+            if isinstance(since, datetime):
+                _query_params.append(
+                    (
+                        'since',
+                        since.strftime(
+                            self.api_client.configuration.datetime_format
+                        )
+                    )
+                )
+            else:
+                _query_params.append(('since', since))
+            
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/plans/{plan_id}/run/agent_updates',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+    @callback_on_exception
+    @auto_fill_args
+    @validate_call(config=ConfigDict(extra='ignore'))
+    def run_detail_plans_plan_id_run_detail_get(
+        self,
+        plan_id: StrictStr,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> object:
+        """Plan Run Detail
+
+
+        :param plan_id: (required)
+        :type plan_id: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._plan_run_detail_plans_plan_id_run_detail_get_serialize(
+            plan_id=plan_id,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "object",
+            '401': None,
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    def _plan_run_detail_plans_plan_id_run_detail_get_serialize(
+        self,
+        plan_id,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if plan_id is not None:
+            _path_params['plan_id'] = plan_id
+        # process the query parameters
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/plans/{plan_id}/run/detail',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+    @callback_on_exception
+    @auto_fill_args
+    @validate_call(config=ConfigDict(extra='ignore'))
+    def run_status_plans_plan_id_run_status_get(
+        self,
+        plan_id: StrictStr,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> object:
+        """Plan Run Status
+
+
+        :param plan_id: (required)
+        :type plan_id: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._plan_run_status_plans_plan_id_run_status_get_serialize(
+            plan_id=plan_id,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "object",
+            '401': None,
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    def _plan_run_status_plans_plan_id_run_status_get_serialize(
+        self,
+        plan_id,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if plan_id is not None:
+            _path_params['plan_id'] = plan_id
+        # process the query parameters
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/plans/{plan_id}/run/status',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+    @callback_on_exception
+    @auto_fill_args
+    @validate_call(config=ConfigDict(extra='ignore'))
+    def modifications_plans_plan_id_generation_request_modifications_post(
+        self,
+        plan_id: StrictStr,
+        user_uuid: StrictStr,
+        request_agent_modifications_model: RequestAgentModificationsModel,
+        settings: Optional[Any] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> object:
+        """Request Modifications
+
+
+        :param plan_id: (required)
+        :type plan_id: str
+        :param user_uuid: (required)
+        :type user_uuid: str
+        :param request_agent_modifications_model: (required)
+        :type request_agent_modifications_model: RequestAgentModificationsModel
+        :param settings:
+        :type settings: object
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._request_modifications_plans_plan_id_generation_request_modifications_post_serialize(
+            plan_id=plan_id,
+            user_uuid=user_uuid,
+            request_agent_modifications_model=request_agent_modifications_model,
+            settings=settings,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "object",
+            '401': None,
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    def _request_modifications_plans_plan_id_generation_request_modifications_post_serialize(
+        self,
+        plan_id,
+        user_uuid,
+        request_agent_modifications_model,
+        settings,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if plan_id is not None:
+            _path_params['plan_id'] = plan_id
+        # process the query parameters
+        if user_uuid is not None:
+            
+            _query_params.append(('user_uuid', user_uuid))
+            
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+        if request_agent_modifications_model is not None:
+            _body_params = request_agent_modifications_model
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params['Content-Type'] = _content_type
+        else:
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json'
+                    ]
+                )
+            )
+            if _default_content_type is not None:
+                _header_params['Content-Type'] = _default_content_type
+
+        # authentication setting
+        _auth_settings: List[str] = [
+        ]
+
+        return self.api_client.param_serialize(
+            method='POST',
+            resource_path='/plans/{plan_id}/generation/request_modifications',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+    @callback_on_exception
+    @auto_fill_args
+    @validate_call(config=ConfigDict(extra='ignore'))
+    def run_modifications_plans_plan_id_run_request_modifications_post(
+        self,
+        plan_id: StrictStr,
+        user_uuid: StrictStr,
+        user_message_model: UserMessageModel,
+        settings: Optional[Any] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> object:
+        """Request Run Modifications
+
+
+        :param plan_id: (required)
+        :type plan_id: str
+        :param user_uuid: (required)
+        :type user_uuid: str
+        :param user_message_model: (required)
+        :type user_message_model: UserMessageModel
+        :param settings:
+        :type settings: object
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._request_run_modifications_plans_plan_id_run_request_modifications_post_serialize(
+            plan_id=plan_id,
+            user_uuid=user_uuid,
+            user_message_model=user_message_model,
+            settings=settings,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "object",
+            '401': None,
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    def _request_run_modifications_plans_plan_id_run_request_modifications_post_serialize(
+        self,
+        plan_id,
+        user_uuid,
+        user_message_model,
+        settings,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if plan_id is not None:
+            _path_params['plan_id'] = plan_id
+        # process the query parameters
+        if user_uuid is not None:
+            
+            _query_params.append(('user_uuid', user_uuid))
+            
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+        if user_message_model is not None:
+            _body_params = user_message_model
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params['Content-Type'] = _content_type
+        else:
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json'
+                    ]
+                )
+            )
+            if _default_content_type is not None:
+                _header_params['Content-Type'] = _default_content_type
+
+        # authentication setting
+        _auth_settings: List[str] = [
+        ]
+
+        return self.api_client.param_serialize(
+            method='POST',
+            resource_path='/plans/{plan_id}/run/request_modifications',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+    @callback_on_exception
+    @auto_fill_args
+    @validate_call(config=ConfigDict(extra='ignore'))
+    def plan_run_plans_plan_id_run_resume_post(
+        self,
+        plan_id: StrictStr,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> object:
+        """Resume Plan Run
+
+
+        :param plan_id: (required)
+        :type plan_id: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._resume_plan_run_plans_plan_id_run_resume_post_serialize(
+            plan_id=plan_id,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "object",
+            '401': None,
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    def _resume_plan_run_plans_plan_id_run_resume_post_serialize(
+        self,
+        plan_id,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if plan_id is not None:
+            _path_params['plan_id'] = plan_id
+        # process the query parameters
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+        ]
+
+        return self.api_client.param_serialize(
+            method='POST',
+            resource_path='/plans/{plan_id}/run/resume',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+    @callback_on_exception
+    @auto_fill_args
+    @validate_call(config=ConfigDict(extra='ignore'))
+    def plan_plans_plan_id_run_post(
+        self,
+        plan_id: StrictStr,
+        user_uuid: StrictStr,
+        settings: Optional[Any] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> object:
+        """Run Plan
+
+
+        :param plan_id: (required)
+        :type plan_id: str
+        :param user_uuid: (required)
+        :type user_uuid: str
+        :param settings:
+        :type settings: object
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
         _param = self._run_plan_plans_plan_id_run_post_serialize(
             plan_id=plan_id,
+            user_uuid=user_uuid,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1081,6 +2278,8 @@ class PlanApi:
     def _run_plan_plans_plan_id_run_post_serialize(
         self,
         plan_id,
+        user_uuid,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -1105,6 +2304,14 @@ class PlanApi:
         if plan_id is not None:
             _path_params['plan_id'] = plan_id
         # process the query parameters
+        if user_uuid is not None:
+            
+            _query_params.append(('user_uuid', user_uuid))
+            
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
@@ -1143,163 +2350,12 @@ class PlanApi:
     @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
-    def plan_plans_plan_id_test_post(
-        self,
-        plan_id: StrictStr,
-        plan_simulation_params: PlanSimulationParams,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> object:
-        """Simulate Plan
-
-
-        :param plan_id: (required)
-        :type plan_id: str
-        :param plan_simulation_params: (required)
-        :type plan_simulation_params: PlanSimulationParams
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._simulate_plan_plans_plan_id_test_post_serialize(
-            plan_id=plan_id,
-            plan_simulation_params=plan_simulation_params,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "object",
-            '401': None,
-            '422': "HTTPValidationError",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    def _simulate_plan_plans_plan_id_test_post_serialize(
-        self,
-        plan_id,
-        plan_simulation_params,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        if plan_id is not None:
-            _path_params['plan_id'] = plan_id
-        # process the query parameters
-        # process the header parameters
-        # process the form parameters
-        # process the body parameter
-        if plan_simulation_params is not None:
-            _body_params = plan_simulation_params
-
-
-        # set the HTTP header `Accept`
-        if 'Accept' not in _header_params:
-            _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
-        # set the HTTP header `Content-Type`
-        if _content_type:
-            _header_params['Content-Type'] = _content_type
-        else:
-            _default_content_type = (
-                self.api_client.select_header_content_type(
-                    [
-                        'application/json'
-                    ]
-                )
-            )
-            if _default_content_type is not None:
-                _header_params['Content-Type'] = _default_content_type
-
-        # authentication setting
-        _auth_settings: List[str] = [
-        ]
-
-        return self.api_client.param_serialize(
-            method='POST',
-            resource_path='/plans/{plan_id}/test',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-    @callback_on_exception
-    @auto_fill_args
-    @validate_call(config=ConfigDict(extra='ignore'))
     def goal_plans_goal_goal_id_update_post(
         self,
         goal_id: StrictStr,
         user_uuid: StrictStr,
         plan_goal: PlanGoal,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1322,6 +2378,8 @@ class PlanApi:
         :type user_uuid: str
         :param plan_goal: (required)
         :type plan_goal: PlanGoal
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1348,6 +2406,7 @@ class PlanApi:
             goal_id=goal_id,
             user_uuid=user_uuid,
             plan_goal=plan_goal,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1375,6 +2434,7 @@ class PlanApi:
         goal_id,
         user_uuid,
         plan_goal,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -1402,6 +2462,10 @@ class PlanApi:
         if user_uuid is not None:
             
             _query_params.append(('user_uuid', user_uuid))
+            
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
             
         # process the header parameters
         # process the form parameters
@@ -1439,6 +2503,344 @@ class PlanApi:
         return self.api_client.param_serialize(
             method='POST',
             resource_path='/plans/goal/{goal_id}/update',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+    @callback_on_exception
+    @auto_fill_args
+    @validate_call(config=ConfigDict(extra='ignore'))
+    def chat_token_plans_plan_id_chat_validate_chat_token_post(
+        self,
+        plan_id: StrictStr,
+        chat_channel_id: StrictStr,
+        token: StrictStr,
+        user_uuid: StrictStr,
+        settings: Optional[Any] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> object:
+        """Validate Chat Token
+
+
+        :param plan_id: (required)
+        :type plan_id: str
+        :param chat_channel_id: (required)
+        :type chat_channel_id: str
+        :param token: (required)
+        :type token: str
+        :param user_uuid: (required)
+        :type user_uuid: str
+        :param settings:
+        :type settings: object
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._validate_chat_token_plans_plan_id_chat_validate_chat_token_post_serialize(
+            plan_id=plan_id,
+            chat_channel_id=chat_channel_id,
+            token=token,
+            user_uuid=user_uuid,
+            settings=settings,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "object",
+            '401': None,
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    def _validate_chat_token_plans_plan_id_chat_validate_chat_token_post_serialize(
+        self,
+        plan_id,
+        chat_channel_id,
+        token,
+        user_uuid,
+        settings,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if plan_id is not None:
+            _path_params['plan_id'] = plan_id
+        # process the query parameters
+        if chat_channel_id is not None:
+            
+            _query_params.append(('chat_channel_id', chat_channel_id))
+            
+        if token is not None:
+            
+            _query_params.append(('token', token))
+            
+        if user_uuid is not None:
+            
+            _query_params.append(('user_uuid', user_uuid))
+            
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+        ]
+
+        return self.api_client.param_serialize(
+            method='POST',
+            resource_path='/plans/{plan_id}/chat/validate_chat_token',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+    @callback_on_exception
+    @auto_fill_args
+    @validate_call(config=ConfigDict(extra='ignore'))
+    def plan_plans_plan_id_generation_validate_and_save_post(
+        self,
+        plan_id: StrictStr,
+        user_uuid: StrictStr,
+        modifications_batch: ModificationsBatch,
+        settings: Optional[Any] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> object:
+        """Validate Plan
+
+
+        :param plan_id: (required)
+        :type plan_id: str
+        :param user_uuid: (required)
+        :type user_uuid: str
+        :param modifications_batch: (required)
+        :type modifications_batch: ModificationsBatch
+        :param settings:
+        :type settings: object
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._validate_plan_plans_plan_id_generation_validate_and_save_post_serialize(
+            plan_id=plan_id,
+            user_uuid=user_uuid,
+            modifications_batch=modifications_batch,
+            settings=settings,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "object",
+            '401': None,
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    def _validate_plan_plans_plan_id_generation_validate_and_save_post_serialize(
+        self,
+        plan_id,
+        user_uuid,
+        modifications_batch,
+        settings,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if plan_id is not None:
+            _path_params['plan_id'] = plan_id
+        # process the query parameters
+        if user_uuid is not None:
+            
+            _query_params.append(('user_uuid', user_uuid))
+            
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+        if modifications_batch is not None:
+            _body_params = modifications_batch
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params['Content-Type'] = _content_type
+        else:
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json'
+                    ]
+                )
+            )
+            if _default_content_type is not None:
+                _header_params['Content-Type'] = _default_content_type
+
+        # authentication setting
+        _auth_settings: List[str] = [
+        ]
+
+        return self.api_client.param_serialize(
+            method='POST',
+            resource_path='/plans/{plan_id}/generation/validate_and_save',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,

@@ -18,7 +18,7 @@ import re  # noqa: F401
 import json
 
 from pydantic import BaseModel, ConfigDict, StrictStr
-from typing import Any, ClassVar, Dict, List
+from typing import Any, ClassVar, Dict, List, Optional
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -26,8 +26,9 @@ class UpdateUserResourceRequest(BaseModel):
     """
     UpdateUserResourceRequest
     """ # noqa: E501
-    instance_display_name: StrictStr
-    __properties: ClassVar[List[str]] = ["instance_display_name"]
+    instance_display_name: Optional[StrictStr] = None
+    description: Optional[StrictStr] = None
+    __properties: ClassVar[List[str]] = ["instance_display_name", "description"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -68,6 +69,16 @@ class UpdateUserResourceRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if instance_display_name (nullable) is None
+        # and model_fields_set contains the field
+        if self.instance_display_name is None and "instance_display_name" in self.model_fields_set:
+            _dict['instance_display_name'] = None
+
+        # set to None if description (nullable) is None
+        # and model_fields_set contains the field
+        if self.description is None and "description" in self.model_fields_set:
+            _dict['description'] = None
+
         return _dict
 
     @classmethod
@@ -80,6 +91,7 @@ class UpdateUserResourceRequest(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "instance_display_name": obj.get("instance_display_name")
+            "instance_display_name": obj.get("instance_display_name"),
+            "description": obj.get("description")
         })
         return _obj

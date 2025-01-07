@@ -10,7 +10,7 @@ Method | HTTP request | Description
 
 
 # **auth_login**
-> AccessAndRefreshTokenResponse auth_login(username, password, grant_type=grant_type, scope=scope, client_id=client_id, client_secret=client_secret)
+> AccessAndRefreshTokenResponse auth_login(username, password, settings=settings, grant_type=grant_type, scope=scope, client_id=client_id, client_secret=client_secret)
 
 Login Access Token
 
@@ -38,6 +38,7 @@ with occam_sdk.ApiClient(configuration) as api_client:
     api_instance = occam_sdk.AuthApi(api_client)
     username = 'username_example' # str | 
     password = 'password_example' # str | 
+    settings = None # object |  (optional)
     grant_type = 'grant_type_example' # str |  (optional)
     scope = '' # str |  (optional) (default to '')
     client_id = 'client_id_example' # str |  (optional)
@@ -45,7 +46,7 @@ with occam_sdk.ApiClient(configuration) as api_client:
 
     try:
         # Login Access Token
-        api_response = api_instance.auth_login(username, password, grant_type=grant_type, scope=scope, client_id=client_id, client_secret=client_secret)
+        api_response = api_instance.auth_login(username, password, settings=settings, grant_type=grant_type, scope=scope, client_id=client_id, client_secret=client_secret)
         print("The response of AuthApi->auth_login:\n")
         pprint(api_response)
     except Exception as e:
@@ -61,6 +62,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **username** | **str**|  | 
  **password** | **str**|  | 
+ **settings** | [**object**](.md)|  | [optional] 
  **grant_type** | **str**|  | [optional] 
  **scope** | **str**|  | [optional] [default to &#39;&#39;]
  **client_id** | **str**|  | [optional] 
@@ -90,7 +92,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **auth_refresh**
-> AccessAndRefreshTokenResponse auth_refresh(refresh_token_request)
+> AccessAndRefreshTokenResponse auth_refresh(refresh_token_request, settings=settings)
 
 Refresh Token
 
@@ -118,10 +120,11 @@ with occam_sdk.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = occam_sdk.AuthApi(api_client)
     refresh_token_request = occam_sdk.RefreshTokenRequest() # RefreshTokenRequest | 
+    settings = None # object |  (optional)
 
     try:
         # Refresh Token
-        api_response = api_instance.auth_refresh(refresh_token_request)
+        api_response = api_instance.auth_refresh(refresh_token_request, settings=settings)
         print("The response of AuthApi->auth_refresh:\n")
         pprint(api_response)
     except Exception as e:
@@ -136,6 +139,7 @@ with occam_sdk.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **refresh_token_request** | [**RefreshTokenRequest**](RefreshTokenRequest.md)|  | 
+ **settings** | [**object**](.md)|  | [optional] 
 
 ### Return type
 
@@ -162,7 +166,7 @@ No authorization required
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **auth_token_from_key**
-> AccessTokenResponse auth_token_from_key(key)
+> AccessTokenResponse auth_token_from_key(key, settings=settings)
 
 Login Access Token Via Key
 
@@ -189,10 +193,11 @@ with occam_sdk.ApiClient(configuration) as api_client:
     # Create an instance of the API class
     api_instance = occam_sdk.AuthApi(api_client)
     key = 'key_example' # str | 
+    settings = None # object |  (optional)
 
     try:
         # Login Access Token Via Key
-        api_response = api_instance.auth_token_from_key(key)
+        api_response = api_instance.auth_token_from_key(key, settings=settings)
         print("The response of AuthApi->auth_token_from_key:\n")
         pprint(api_response)
     except Exception as e:
@@ -207,6 +212,7 @@ with occam_sdk.ApiClient(configuration) as api_client:
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **key** | **str**|  | 
+ **settings** | [**object**](.md)|  | [optional] 
 
 ### Return type
 

@@ -17,7 +17,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, StrictBool, StrictStr
+from pydantic import BaseModel, ConfigDict, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
 from occam_sdk.models.connection_status import ConnectionStatus
 from typing import Optional, Set
@@ -32,8 +32,8 @@ class GetDatasetResponse(BaseModel):
     content: Dict[str, Any]
     address_summary: Optional[StrictStr] = '/temporary/placeholder'
     connection_status: ConnectionStatus
-    is_root: StrictBool
-    __properties: ClassVar[List[str]] = ["uuid", "name", "content", "address_summary", "connection_status", "is_root"]
+    description: Optional[StrictStr] = None
+    __properties: ClassVar[List[str]] = ["uuid", "name", "content", "address_summary", "connection_status", "description"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -74,6 +74,11 @@ class GetDatasetResponse(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # set to None if description (nullable) is None
+        # and model_fields_set contains the field
+        if self.description is None and "description" in self.model_fields_set:
+            _dict['description'] = None
+
         return _dict
 
     @classmethod
@@ -91,6 +96,6 @@ class GetDatasetResponse(BaseModel):
             "content": obj.get("content"),
             "address_summary": obj.get("address_summary") if obj.get("address_summary") is not None else '/temporary/placeholder',
             "connection_status": obj.get("connection_status"),
-            "is_root": obj.get("is_root")
+            "description": obj.get("description")
         })
         return _obj

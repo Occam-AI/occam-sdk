@@ -10,7 +10,7 @@ Name | Type | Description | Notes
 **content** | **object** |  | 
 **address_summary** | **str** |  | [optional] [default to '/temporary/placeholder']
 **connection_status** | [**ConnectionStatus**](ConnectionStatus.md) |  | 
-**is_root** | **bool** |  | 
+**description** | **str** |  | [optional] 
 
 ## Example
 

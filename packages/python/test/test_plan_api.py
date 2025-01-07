@@ -54,10 +54,10 @@ class TestPlanApi(unittest.TestCase):
         """
         pass
 
-    def test_modify_plan_plans_plan_id_modify_post(self) -> None:
-        """Test case for modify_plan_plans_plan_id_modify_post
+    def test_pause_plan_run_plans_plan_id_run_pause_post(self) -> None:
+        """Test case for pause_plan_run_plans_plan_id_run_pause_post
 
-        Modify Plan
+        Pause Plan Run
         """
         pass
 
@@ -68,10 +68,66 @@ class TestPlanApi(unittest.TestCase):
         """
         pass
 
-    def test_plan_status_plans_plan_id_status_get(self) -> None:
-        """Test case for plan_status_plans_plan_id_status_get
+    def test_plan_generation_detail_plans_plan_id_generation_detail_get(self) -> None:
+        """Test case for plan_generation_detail_plans_plan_id_generation_detail_get
 
-        Plan Status
+        Plan Generation Detail
+        """
+        pass
+
+    def test_plan_generation_status_plans_plan_id_generation_status_get(self) -> None:
+        """Test case for plan_generation_status_plans_plan_id_generation_status_get
+
+        Plan Generation Status
+        """
+        pass
+
+    def test_plan_run_agent_updates_check_plans_plan_id_run_agent_updates_check_get(self) -> None:
+        """Test case for plan_run_agent_updates_check_plans_plan_id_run_agent_updates_check_get
+
+        Plan Run Agent Updates Check
+        """
+        pass
+
+    def test_plan_run_agent_updates_plans_plan_id_run_agent_updates_get(self) -> None:
+        """Test case for plan_run_agent_updates_plans_plan_id_run_agent_updates_get
+
+        Plan Run Agent Updates
+        """
+        pass
+
+    def test_plan_run_detail_plans_plan_id_run_detail_get(self) -> None:
+        """Test case for plan_run_detail_plans_plan_id_run_detail_get
+
+        Plan Run Detail
+        """
+        pass
+
+    def test_plan_run_status_plans_plan_id_run_status_get(self) -> None:
+        """Test case for plan_run_status_plans_plan_id_run_status_get
+
+        Plan Run Status
+        """
+        pass
+
+    def test_request_modifications_plans_plan_id_generation_request_modifications_post(self) -> None:
+        """Test case for request_modifications_plans_plan_id_generation_request_modifications_post
+
+        Request Modifications
+        """
+        pass
+
+    def test_request_run_modifications_plans_plan_id_run_request_modifications_post(self) -> None:
+        """Test case for request_run_modifications_plans_plan_id_run_request_modifications_post
+
+        Request Run Modifications
+        """
+        pass
+
+    def test_resume_plan_run_plans_plan_id_run_resume_post(self) -> None:
+        """Test case for resume_plan_run_plans_plan_id_run_resume_post
+
+        Resume Plan Run
         """
         pass
 
@@ -82,17 +138,24 @@ class TestPlanApi(unittest.TestCase):
         """
         pass
 
-    def test_simulate_plan_plans_plan_id_test_post(self) -> None:
-        """Test case for simulate_plan_plans_plan_id_test_post
-
-        Simulate Plan
-        """
-        pass
-
     def test_update_goal_plans_goal_goal_id_update_post(self) -> None:
         """Test case for update_goal_plans_goal_goal_id_update_post
 
         Update Goal
+        """
+        pass
+
+    def test_validate_chat_token_plans_plan_id_chat_validate_chat_token_post(self) -> None:
+        """Test case for validate_chat_token_plans_plan_id_chat_validate_chat_token_post
+
+        Validate Chat Token
+        """
+        pass
+
+    def test_validate_plan_plans_plan_id_generation_validate_and_save_post(self) -> None:
+        """Test case for validate_plan_plans_plan_id_generation_validate_and_save_post
+
+        Validate Plan
         """
         pass
 

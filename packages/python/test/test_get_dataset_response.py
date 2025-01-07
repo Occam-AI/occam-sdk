@@ -40,7 +40,7 @@ class TestGetDatasetResponse(unittest.TestCase):
                 content = occam_sdk.models.content.Content(),
                 address_summary = '/temporary/placeholder',
                 connection_status = 'is_template',
-                is_root = True
+                description = ''
             )
         else:
             return GetDatasetResponse(
@@ -48,7 +48,6 @@ class TestGetDatasetResponse(unittest.TestCase):
                 name = '',
                 content = occam_sdk.models.content.Content(),
                 connection_status = 'is_template',
-                is_root = True,
         )
         """
 

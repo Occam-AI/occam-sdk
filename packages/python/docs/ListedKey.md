@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **depth** | **int** |  | 
 **date_created** | **datetime** |  | [optional] 
 **date_modified** | **datetime** |  | [optional] 
+**suggested_name** | **str** |  | [optional] 
 
 ## Example
 

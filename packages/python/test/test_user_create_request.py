@@ -36,12 +36,16 @@ class TestUserCreateRequest(unittest.TestCase):
         if include_optional:
             return UserCreateRequest(
                 email = '',
-                password = ''
+                name = '',
+                password = '',
+                membership_type = 'free'
             )
         else:
             return UserCreateRequest(
                 email = '',
+                name = '',
                 password = '',
+                membership_type = 'free',
         )
         """
 

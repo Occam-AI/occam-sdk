@@ -6,7 +6,9 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **email** | **str** |  | 
+**name** | **str** |  | 
 **password** | **str** |  | 
+**membership_type** | [**MembershipType**](MembershipType.md) |  | 
 
 ## Example
 

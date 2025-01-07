@@ -9,8 +9,9 @@ Name | Type | Description | Notes
 **kind** | **str** |  | 
 **kind_display_name** | **str** |  | 
 **instance_display_name** | **str** |  | [optional] 
-**short_description** | **str** |  | 
-**long_description** | **str** |  | 
+**kind_short_description** | **str** |  | 
+**kind_long_description** | **str** |  | 
+**description** | **str** |  | [optional] 
 **icon** | **str** |  | 
 **category** | **str** |  | 
 **category_rank** | **int** |  | 
@@ -22,14 +23,17 @@ Name | Type | Description | Notes
 **connection_status** | [**ConnectionStatus**](ConnectionStatus.md) |  | 
 **subtool_kinds** | **List[str]** |  | [optional] 
 **connection_uuid** | **str** |  | [optional] 
+**from_code** | **bool** |  | [optional] [default to False]
 **is_template** | **bool** |  | [optional] [default to False]
 **is_scannable** | **bool** |  | [optional] [default to False]
 **is_template_instance** | **bool** |  | [optional] [default to False]
 **credential_uuid** | **str** |  | [optional] 
+**credential_metadata** | **object** |  | [optional] 
 **datasets** | [**List[GetDatasetResponse]**](GetDatasetResponse.md) |  | [optional] 
 **input_fields** | [**List[BasicFieldInfo]**](BasicFieldInfo.md) |  | [optional] 
 **params_model** | **object** |  | [optional] 
 **output_fields** | [**List[BasicFieldInfo]**](BasicFieldInfo.md) |  | [optional] 
+**access_name** | **str** |  | [optional] 
 
 ## Example
 

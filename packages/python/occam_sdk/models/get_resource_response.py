@@ -34,8 +34,9 @@ class GetResourceResponse(BaseModel):
     kind: StrictStr
     kind_display_name: StrictStr
     instance_display_name: Optional[StrictStr] = None
-    short_description: StrictStr
-    long_description: StrictStr
+    kind_short_description: StrictStr
+    kind_long_description: StrictStr
+    description: Optional[StrictStr] = None
     icon: StrictStr
     category: StrictStr
     category_rank: StrictInt
@@ -47,15 +48,18 @@ class GetResourceResponse(BaseModel):
     connection_status: Optional[ConnectionStatus]
     subtool_kinds: Optional[List[StrictStr]] = None
     connection_uuid: Optional[StrictStr] = None
+    from_code: Optional[StrictBool] = False
     is_template: Optional[StrictBool] = False
     is_scannable: Optional[StrictBool] = False
     is_template_instance: Optional[StrictBool] = False
     credential_uuid: Optional[StrictStr] = None
+    credential_metadata: Optional[Dict[str, Any]] = None
     datasets: Optional[List[GetDatasetResponse]] = None
     input_fields: Optional[List[BasicFieldInfo]] = None
     params_model: Optional[Dict[str, Any]] = None
     output_fields: Optional[List[BasicFieldInfo]] = None
-    __properties: ClassVar[List[str]] = ["uuid", "kind", "kind_display_name", "instance_display_name", "short_description", "long_description", "icon", "category", "category_rank", "address", "needs_credentials", "is_datasource", "strictness", "is_connected", "connection_status", "subtool_kinds", "connection_uuid", "is_template", "is_scannable", "is_template_instance", "credential_uuid", "datasets", "input_fields", "params_model", "output_fields"]
+    access_name: Optional[StrictStr] = None
+    __properties: ClassVar[List[str]] = ["uuid", "kind", "kind_display_name", "instance_display_name", "kind_short_description", "kind_long_description", "description", "icon", "category", "category_rank", "address", "needs_credentials", "is_datasource", "strictness", "is_connected", "connection_status", "subtool_kinds", "connection_uuid", "from_code", "is_template", "is_scannable", "is_template_instance", "credential_uuid", "credential_metadata", "datasets", "input_fields", "params_model", "output_fields", "access_name"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -122,6 +126,11 @@ class GetResourceResponse(BaseModel):
         if self.instance_display_name is None and "instance_display_name" in self.model_fields_set:
             _dict['instance_display_name'] = None
 
+        # set to None if description (nullable) is None
+        # and model_fields_set contains the field
+        if self.description is None and "description" in self.model_fields_set:
+            _dict['description'] = None
+
         # set to None if connection_status (nullable) is None
         # and model_fields_set contains the field
         if self.connection_status is None and "connection_status" in self.model_fields_set:
@@ -141,6 +150,11 @@ class GetResourceResponse(BaseModel):
         # and model_fields_set contains the field
         if self.credential_uuid is None and "credential_uuid" in self.model_fields_set:
             _dict['credential_uuid'] = None
+
+        # set to None if credential_metadata (nullable) is None
+        # and model_fields_set contains the field
+        if self.credential_metadata is None and "credential_metadata" in self.model_fields_set:
+            _dict['credential_metadata'] = None
 
         # set to None if datasets (nullable) is None
         # and model_fields_set contains the field
@@ -162,6 +176,11 @@ class GetResourceResponse(BaseModel):
         if self.output_fields is None and "output_fields" in self.model_fields_set:
             _dict['output_fields'] = None
 
+        # set to None if access_name (nullable) is None
+        # and model_fields_set contains the field
+        if self.access_name is None and "access_name" in self.model_fields_set:
+            _dict['access_name'] = None
+
         return _dict
 
     @classmethod
@@ -178,8 +197,9 @@ class GetResourceResponse(BaseModel):
             "kind": obj.get("kind"),
             "kind_display_name": obj.get("kind_display_name"),
             "instance_display_name": obj.get("instance_display_name"),
-            "short_description": obj.get("short_description"),
-            "long_description": obj.get("long_description"),
+            "kind_short_description": obj.get("kind_short_description"),
+            "kind_long_description": obj.get("kind_long_description"),
+            "description": obj.get("description"),
             "icon": obj.get("icon"),
             "category": obj.get("category"),
             "category_rank": obj.get("category_rank"),
@@ -191,13 +211,16 @@ class GetResourceResponse(BaseModel):
             "connection_status": obj.get("connection_status"),
             "subtool_kinds": obj.get("subtool_kinds"),
             "connection_uuid": obj.get("connection_uuid"),
+            "from_code": obj.get("from_code") if obj.get("from_code") is not None else False,
             "is_template": obj.get("is_template") if obj.get("is_template") is not None else False,
             "is_scannable": obj.get("is_scannable") if obj.get("is_scannable") is not None else False,
             "is_template_instance": obj.get("is_template_instance") if obj.get("is_template_instance") is not None else False,
             "credential_uuid": obj.get("credential_uuid"),
+            "credential_metadata": obj.get("credential_metadata"),
             "datasets": [GetDatasetResponse.from_dict(_item) for _item in obj["datasets"]] if obj.get("datasets") is not None else None,
             "input_fields": [BasicFieldInfo.from_dict(_item) for _item in obj["input_fields"]] if obj.get("input_fields") is not None else None,
             "params_model": obj.get("params_model"),
-            "output_fields": [BasicFieldInfo.from_dict(_item) for _item in obj["output_fields"]] if obj.get("output_fields") is not None else None
+            "output_fields": [BasicFieldInfo.from_dict(_item) for _item in obj["output_fields"]] if obj.get("output_fields") is not None else None,
+            "access_name": obj.get("access_name")
         })
         return _obj

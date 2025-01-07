@@ -17,7 +17,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
 from pydantic import StrictBytes, StrictStr, field_validator
-from typing import Any, List, Tuple, Union
+from typing import Any, List, Optional, Tuple, Union
 from occam_sdk.models.connector_schema import ConnectorSchema
 from occam_sdk.models.credentials_data_partial_request import CredentialsDataPartialRequest
 from occam_sdk.models.file_upload_response import FileUploadResponse
@@ -60,6 +60,7 @@ class IntegrationApi:
     def credential_credentials_post(
         self,
         credentials_data_partial_request: CredentialsDataPartialRequest,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -79,6 +80,8 @@ class IntegrationApi:
 
         :param credentials_data_partial_request: (required)
         :type credentials_data_partial_request: CredentialsDataPartialRequest
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -103,6 +106,7 @@ class IntegrationApi:
 
         _param = self._add_credential_credentials_post_serialize(
             credentials_data_partial_request=credentials_data_partial_request,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -128,6 +132,7 @@ class IntegrationApi:
     def _add_credential_credentials_post_serialize(
         self,
         credentials_data_partial_request,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -150,6 +155,10 @@ class IntegrationApi:
 
         # process the path parameters
         # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
@@ -207,6 +216,7 @@ class IntegrationApi:
     def credential_credentials_uuid_delete(
         self,
         uuid: StrictStr,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -226,6 +236,8 @@ class IntegrationApi:
 
         :param uuid: (required)
         :type uuid: str
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -250,6 +262,7 @@ class IntegrationApi:
 
         _param = self._delete_credential_credentials_uuid_delete_serialize(
             uuid=uuid,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -275,6 +288,7 @@ class IntegrationApi:
     def _delete_credential_credentials_uuid_delete_serialize(
         self,
         uuid,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -299,6 +313,10 @@ class IntegrationApi:
         if uuid is not None:
             _path_params['uuid'] = uuid
         # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
@@ -340,6 +358,7 @@ class IntegrationApi:
     @validate_call(config=ConfigDict(extra='ignore'))
     def connector_schemas_connectors_schemas_get(
         self,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -357,6 +376,8 @@ class IntegrationApi:
 
         Get the JSON schema for all available connectors
 
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -380,6 +401,7 @@ class IntegrationApi:
         """ # noqa: E501
 
         _param = self._get_connector_schemas_connectors_schemas_get_serialize(
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -389,6 +411,7 @@ class IntegrationApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "List[ConnectorSchema]",
             '401': None,
+            '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -403,6 +426,7 @@ class IntegrationApi:
 
     def _get_connector_schemas_connectors_schemas_get_serialize(
         self,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -425,6 +449,10 @@ class IntegrationApi:
 
         # process the path parameters
         # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
@@ -468,6 +496,7 @@ class IntegrationApi:
         self,
         state: Any,
         code: Any,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -488,6 +517,8 @@ class IntegrationApi:
         :type state: object
         :param code: (required)
         :type code: object
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -513,6 +544,7 @@ class IntegrationApi:
         _param = self._google_oauth_end_integrations_oauth_google_end_get_serialize(
             state=state,
             code=code,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -539,6 +571,7 @@ class IntegrationApi:
         self,
         state,
         code,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -568,6 +601,10 @@ class IntegrationApi:
         if code is not None:
             
             _query_params.append(('code', code))
+            
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
             
         # process the header parameters
         # process the form parameters
@@ -610,6 +647,7 @@ class IntegrationApi:
     def oauth_end_integrations_oauth_isolated_end_get(
         self,
         state: StrictStr,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -628,6 +666,8 @@ class IntegrationApi:
 
         :param state: (required)
         :type state: str
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -652,6 +692,7 @@ class IntegrationApi:
 
         _param = self._isolated_oauth_end_integrations_oauth_isolated_end_get_serialize(
             state=state,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -677,6 +718,7 @@ class IntegrationApi:
     def _isolated_oauth_end_integrations_oauth_isolated_end_get_serialize(
         self,
         state,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -702,6 +744,10 @@ class IntegrationApi:
         if state is not None:
             
             _query_params.append(('state', state))
+            
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
             
         # process the header parameters
         # process the form parameters
@@ -745,6 +791,7 @@ class IntegrationApi:
     def confirm_integrations_merge_confirm_post(
         self,
         merge_public_token_request: MergePublicTokenRequest,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -763,6 +810,8 @@ class IntegrationApi:
 
         :param merge_public_token_request: (required)
         :type merge_public_token_request: MergePublicTokenRequest
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -787,6 +836,7 @@ class IntegrationApi:
 
         _param = self._merge_confirm_integrations_merge_confirm_post_serialize(
             merge_public_token_request=merge_public_token_request,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -812,6 +862,7 @@ class IntegrationApi:
     def _merge_confirm_integrations_merge_confirm_post_serialize(
         self,
         merge_public_token_request,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -834,6 +885,10 @@ class IntegrationApi:
 
         # process the path parameters
         # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
@@ -891,6 +946,7 @@ class IntegrationApi:
     def link_token_integrations_merge_link_token_get(
         self,
         resource_kind: StrictStr,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -909,6 +965,8 @@ class IntegrationApi:
 
         :param resource_kind: (required)
         :type resource_kind: str
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -933,6 +991,7 @@ class IntegrationApi:
 
         _param = self._merge_link_token_integrations_merge_link_token_get_serialize(
             resource_kind=resource_kind,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -958,6 +1017,7 @@ class IntegrationApi:
     def _merge_link_token_integrations_merge_link_token_get_serialize(
         self,
         resource_kind,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -983,6 +1043,10 @@ class IntegrationApi:
         if resource_kind is not None:
             
             _query_params.append(('resource_kind', resource_kind))
+            
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
             
         # process the header parameters
         # process the form parameters
@@ -1027,6 +1091,7 @@ class IntegrationApi:
         self,
         state: Any,
         code: Any,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1047,6 +1112,8 @@ class IntegrationApi:
         :type state: object
         :param code: (required)
         :type code: object
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1072,6 +1139,7 @@ class IntegrationApi:
         _param = self._oauth_end_integrations_oauth_end_get_serialize(
             state=state,
             code=code,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1098,6 +1166,7 @@ class IntegrationApi:
         self,
         state,
         code,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -1127,6 +1196,10 @@ class IntegrationApi:
         if code is not None:
             
             _query_params.append(('code', code))
+            
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
             
         # process the header parameters
         # process the form parameters
@@ -1170,6 +1243,7 @@ class IntegrationApi:
         self,
         resource_kind: StrictStr,
         redirect_url: StrictStr,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1190,6 +1264,8 @@ class IntegrationApi:
         :type resource_kind: str
         :param redirect_url: (required)
         :type redirect_url: str
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1215,6 +1291,7 @@ class IntegrationApi:
         _param = self._oauth_start_integrations_oauth_start_get_serialize(
             resource_kind=resource_kind,
             redirect_url=redirect_url,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1241,6 +1318,7 @@ class IntegrationApi:
         self,
         resource_kind,
         redirect_url,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -1270,6 +1348,10 @@ class IntegrationApi:
         if redirect_url is not None:
             
             _query_params.append(('redirect_url', redirect_url))
+            
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
             
         # process the header parameters
         # process the form parameters
@@ -1313,6 +1395,7 @@ class IntegrationApi:
     def file_credentials_fileupload_post(
         self,
         file: Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]],
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1332,6 +1415,8 @@ class IntegrationApi:
 
         :param file: (required)
         :type file: bytearray
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1356,6 +1441,7 @@ class IntegrationApi:
 
         _param = self._upload_file_credentials_fileupload_post_serialize(
             file=file,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1381,6 +1467,7 @@ class IntegrationApi:
     def _upload_file_credentials_fileupload_post_serialize(
         self,
         file,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -1403,6 +1490,10 @@ class IntegrationApi:
 
         # process the path parameters
         # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
         # process the header parameters
         # process the form parameters
         if file is not None:

@@ -33,6 +33,55 @@ class TestResourcesApi(unittest.TestCase):
         """
         pass
 
+    def test_add_dataset_resources_source_uuid_dataset_post(self) -> None:
+        """Test case for add_dataset_resources_source_uuid_dataset_post
+
+        Add Dataset
+        """
+        pass
+
+    def test_dataset_allowed_schemas(self) -> None:
+        """Test case for dataset_allowed_schemas
+
+        Get Datasource Dataset Schemas
+        """
+        pass
+
+    def test_dataset_batch_add(self) -> None:
+        """Test case for dataset_batch_add
+
+        Batch Add Dataset
+        """
+        pass
+
+    def test_dataset_delete(self) -> None:
+        """Test case for dataset_delete
+
+        Delete Dataset
+        """
+        pass
+
+    def test_dataset_edit(self) -> None:
+        """Test case for dataset_edit
+
+        Edit Dataset
+        """
+        pass
+
+    def test_dataset_get(self) -> None:
+        """Test case for dataset_get
+
+        Get Dataset
+        """
+        pass
+
+    def test_dataset_list(self) -> None:
+        """Test case for dataset_list
+
+        Get Datasets
+        """
+        pass
+
     def test_delete_credential_credentials_uuid_delete(self) -> None:
         """Test case for delete_credential_credentials_uuid_delete
 
@@ -57,7 +106,7 @@ class TestResourcesApi(unittest.TestCase):
     def test_resource_datasource_schemas(self) -> None:
         """Test case for resource_datasource_schemas
 
-        Get Datasource Schemas
+        Get Datasources Schemas
         """
         pass
 
@@ -75,17 +124,17 @@ class TestResourcesApi(unittest.TestCase):
         """
         pass
 
+    def test_resource_get_files(self) -> None:
+        """Test case for resource_get_files
+
+        Get Resource Files
+        """
+        pass
+
     def test_resource_list(self) -> None:
         """Test case for resource_list
 
         Get Resources
-        """
-        pass
-
-    def test_resource_list_files(self) -> None:
-        """Test case for resource_list_files
-
-        Get Resource Files
         """
         pass
 
@@ -110,8 +159,8 @@ class TestResourcesApi(unittest.TestCase):
         """
         pass
 
-    def test_resource_tool_schemas(self) -> None:
-        """Test case for resource_tool_schemas
+    def test_resource_tools_schemas(self) -> None:
+        """Test case for resource_tools_schemas
 
         Get Tools Schemas
         """

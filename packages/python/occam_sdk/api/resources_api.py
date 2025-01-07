@@ -20,15 +20,22 @@ from pydantic import StrictBool, StrictBytes, StrictStr
 from typing import Any, Dict, List, Optional, Tuple, Union
 from occam_sdk.models.add_data_source_request import AddDataSourceRequest
 from occam_sdk.models.add_data_source_response import AddDataSourceResponse
+from occam_sdk.models.add_dataset_request import AddDatasetRequest
+from occam_sdk.models.add_dataset_response import AddDatasetResponse
 from occam_sdk.models.add_user_to_resource_request import AddUserToResourceRequest
 from occam_sdk.models.credentials_data_partial_request import CredentialsDataPartialRequest
+from occam_sdk.models.edit_dataset_request import EditDatasetRequest
+from occam_sdk.models.edit_dataset_response import EditDatasetResponse
 from occam_sdk.models.file_upload_response import FileUploadResponse
+from occam_sdk.models.get_dataset_response import GetDatasetResponse
 from occam_sdk.models.get_resource_response import GetResourceResponse
 from occam_sdk.models.get_resource_schema_response import GetResourceSchemaResponse
 from occam_sdk.models.get_resources_response import GetResourcesResponse
 from occam_sdk.models.listed_key import ListedKey
 from occam_sdk.models.refresh_resources_request import RefreshResourcesRequest
 from occam_sdk.models.resource_connection_deletion_request import ResourceConnectionDeletionRequest
+from occam_sdk.models.response_batch_add_dataset import ResponseBatchAddDataset
+from occam_sdk.models.response_datasource_dataset_schemas import ResponseDatasourceDatasetSchemas
 from occam_sdk.models.response_resource_info import ResponseResourceInfo
 from occam_sdk.models.uuid_response import UUIDResponse
 from occam_sdk.models.update_user_resource_request import UpdateUserResourceRequest
@@ -67,6 +74,7 @@ class ResourcesApi:
     def credential_credentials_post(
         self,
         credentials_data_partial_request: CredentialsDataPartialRequest,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -86,6 +94,8 @@ class ResourcesApi:
 
         :param credentials_data_partial_request: (required)
         :type credentials_data_partial_request: CredentialsDataPartialRequest
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -110,6 +120,7 @@ class ResourcesApi:
 
         _param = self._add_credential_credentials_post_serialize(
             credentials_data_partial_request=credentials_data_partial_request,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -135,6 +146,7 @@ class ResourcesApi:
     def _add_credential_credentials_post_serialize(
         self,
         credentials_data_partial_request,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -157,6 +169,10 @@ class ResourcesApi:
 
         # process the path parameters
         # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
@@ -211,9 +227,1093 @@ class ResourcesApi:
     @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
+    def dataset_resources_source_uuid_dataset_post(
+        self,
+        source_uuid: StrictStr,
+        add_dataset_request: AddDatasetRequest,
+        settings: Optional[Any] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> AddDatasetResponse:
+        """Add Dataset
+
+        Add a data dataset to an existing source
+
+        :param source_uuid: (required)
+        :type source_uuid: str
+        :param add_dataset_request: (required)
+        :type add_dataset_request: AddDatasetRequest
+        :param settings:
+        :type settings: object
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._add_dataset_resources_source_uuid_dataset_post_serialize(
+            source_uuid=source_uuid,
+            add_dataset_request=add_dataset_request,
+            settings=settings,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "AddDatasetResponse",
+            '401': None,
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    def _add_dataset_resources_source_uuid_dataset_post_serialize(
+        self,
+        source_uuid,
+        add_dataset_request,
+        settings,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if source_uuid is not None:
+            _path_params['source_uuid'] = source_uuid
+        # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+        if add_dataset_request is not None:
+            _body_params = add_dataset_request
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params['Content-Type'] = _content_type
+        else:
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json'
+                    ]
+                )
+            )
+            if _default_content_type is not None:
+                _header_params['Content-Type'] = _default_content_type
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'OAuth2PasswordBearer'
+        ]
+
+        return self.api_client.param_serialize(
+            method='POST',
+            resource_path='/resources/{source_uuid}/dataset',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+    @callback_on_exception
+    @auto_fill_args
+    @validate_call(config=ConfigDict(extra='ignore'))
+    def allowed_schemas(
+        self,
+        uuid: StrictStr,
+        settings: Optional[Any] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ResponseDatasourceDatasetSchemas:
+        """Get Datasource Dataset Schemas
+
+        Returns the JSON schemas for datasets allowed by a datasource
+
+        :param uuid: (required)
+        :type uuid: str
+        :param settings:
+        :type settings: object
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._dataset_allowed_schemas_serialize(
+            uuid=uuid,
+            settings=settings,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "ResponseDatasourceDatasetSchemas",
+            '401': None,
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    def _dataset_allowed_schemas_serialize(
+        self,
+        uuid,
+        settings,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if uuid is not None:
+            _path_params['uuid'] = uuid
+        # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'OAuth2PasswordBearer'
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/resources/{uuid}/dataset/schema',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+    @callback_on_exception
+    @auto_fill_args
+    @validate_call(config=ConfigDict(extra='ignore'))
+    def batch_add(
+        self,
+        source_uuid: StrictStr,
+        add_dataset_request: List[AddDatasetRequest],
+        settings: Optional[Any] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> List[ResponseBatchAddDataset]:
+        """Batch Add Dataset
+
+        Add multiple datasets to an existing source
+
+        :param source_uuid: (required)
+        :type source_uuid: str
+        :param add_dataset_request: (required)
+        :type add_dataset_request: List[AddDatasetRequest]
+        :param settings:
+        :type settings: object
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._dataset_batch_add_serialize(
+            source_uuid=source_uuid,
+            add_dataset_request=add_dataset_request,
+            settings=settings,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "List[ResponseBatchAddDataset]",
+            '401': None,
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    def _dataset_batch_add_serialize(
+        self,
+        source_uuid,
+        add_dataset_request,
+        settings,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+            'AddDatasetRequest': '',
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if source_uuid is not None:
+            _path_params['source_uuid'] = source_uuid
+        # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+        if add_dataset_request is not None:
+            _body_params = add_dataset_request
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params['Content-Type'] = _content_type
+        else:
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json'
+                    ]
+                )
+            )
+            if _default_content_type is not None:
+                _header_params['Content-Type'] = _default_content_type
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'OAuth2PasswordBearer'
+        ]
+
+        return self.api_client.param_serialize(
+            method='POST',
+            resource_path='/resources/{source_uuid}/datasets',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+    @callback_on_exception
+    @auto_fill_args
+    @validate_call(config=ConfigDict(extra='ignore'))
+    def delete(
+        self,
+        uuid: StrictStr,
+        dataset_uuid: StrictStr,
+        settings: Optional[Any] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> UUIDResponse:
+        """Delete Dataset
+
+        Delete a dataset for the data source
+
+        :param uuid: (required)
+        :type uuid: str
+        :param dataset_uuid: (required)
+        :type dataset_uuid: str
+        :param settings:
+        :type settings: object
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._dataset_delete_serialize(
+            uuid=uuid,
+            dataset_uuid=dataset_uuid,
+            settings=settings,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "UUIDResponse",
+            '401': None,
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    def _dataset_delete_serialize(
+        self,
+        uuid,
+        dataset_uuid,
+        settings,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if uuid is not None:
+            _path_params['uuid'] = uuid
+        if dataset_uuid is not None:
+            _path_params['dataset_uuid'] = dataset_uuid
+        # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'OAuth2PasswordBearer'
+        ]
+
+        return self.api_client.param_serialize(
+            method='DELETE',
+            resource_path='/resources/{uuid}/dataset/{dataset_uuid}',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+    @callback_on_exception
+    @auto_fill_args
+    @validate_call(config=ConfigDict(extra='ignore'))
+    def edit(
+        self,
+        uuid: StrictStr,
+        dataset_uuid: StrictStr,
+        edit_dataset_request: EditDatasetRequest,
+        settings: Optional[Any] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> EditDatasetResponse:
+        """Edit Dataset
+
+        Edit a dataset for the data source
+
+        :param uuid: (required)
+        :type uuid: str
+        :param dataset_uuid: (required)
+        :type dataset_uuid: str
+        :param edit_dataset_request: (required)
+        :type edit_dataset_request: EditDatasetRequest
+        :param settings:
+        :type settings: object
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._dataset_edit_serialize(
+            uuid=uuid,
+            dataset_uuid=dataset_uuid,
+            edit_dataset_request=edit_dataset_request,
+            settings=settings,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "EditDatasetResponse",
+            '401': None,
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    def _dataset_edit_serialize(
+        self,
+        uuid,
+        dataset_uuid,
+        edit_dataset_request,
+        settings,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if uuid is not None:
+            _path_params['uuid'] = uuid
+        if dataset_uuid is not None:
+            _path_params['dataset_uuid'] = dataset_uuid
+        # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+        if edit_dataset_request is not None:
+            _body_params = edit_dataset_request
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params['Content-Type'] = _content_type
+        else:
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json'
+                    ]
+                )
+            )
+            if _default_content_type is not None:
+                _header_params['Content-Type'] = _default_content_type
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'OAuth2PasswordBearer'
+        ]
+
+        return self.api_client.param_serialize(
+            method='POST',
+            resource_path='/resources/{uuid}/dataset/{dataset_uuid}',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+    @callback_on_exception
+    @auto_fill_args
+    @validate_call(config=ConfigDict(extra='ignore'))
+    def get(
+        self,
+        uuid: StrictStr,
+        dataset_uuid: StrictStr,
+        settings: Optional[Any] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> GetDatasetResponse:
+        """Get Dataset
+
+        Get a dataset for the data source
+
+        :param uuid: (required)
+        :type uuid: str
+        :param dataset_uuid: (required)
+        :type dataset_uuid: str
+        :param settings:
+        :type settings: object
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._dataset_get_serialize(
+            uuid=uuid,
+            dataset_uuid=dataset_uuid,
+            settings=settings,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "GetDatasetResponse",
+            '401': None,
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    def _dataset_get_serialize(
+        self,
+        uuid,
+        dataset_uuid,
+        settings,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if uuid is not None:
+            _path_params['uuid'] = uuid
+        if dataset_uuid is not None:
+            _path_params['dataset_uuid'] = dataset_uuid
+        # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'OAuth2PasswordBearer'
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/resources/{uuid}/dataset/{dataset_uuid}',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+    @callback_on_exception
+    @auto_fill_args
+    @validate_call(config=ConfigDict(extra='ignore'))
+    def list(
+        self,
+        uuid: StrictStr,
+        settings: Optional[Any] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> List[GetDatasetResponse]:
+        """Get Datasets
+
+        Get all datasets for the data source
+
+        :param uuid: (required)
+        :type uuid: str
+        :param settings:
+        :type settings: object
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._dataset_list_serialize(
+            uuid=uuid,
+            settings=settings,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "List[GetDatasetResponse]",
+            '401': None,
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    def _dataset_list_serialize(
+        self,
+        uuid,
+        settings,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if uuid is not None:
+            _path_params['uuid'] = uuid
+        # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'OAuth2PasswordBearer'
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/resources/{uuid}/dataset',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+    @callback_on_exception
+    @auto_fill_args
+    @validate_call(config=ConfigDict(extra='ignore'))
     def credential_credentials_uuid_delete(
         self,
         uuid: StrictStr,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -233,6 +1333,8 @@ class ResourcesApi:
 
         :param uuid: (required)
         :type uuid: str
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -257,6 +1359,7 @@ class ResourcesApi:
 
         _param = self._delete_credential_credentials_uuid_delete_serialize(
             uuid=uuid,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -282,6 +1385,7 @@ class ResourcesApi:
     def _delete_credential_credentials_uuid_delete_serialize(
         self,
         uuid,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -306,6 +1410,10 @@ class ResourcesApi:
         if uuid is not None:
             _path_params['uuid'] = uuid
         # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
@@ -349,6 +1457,7 @@ class ResourcesApi:
         self,
         add_data_source_request: AddDataSourceRequest,
         include_datasets: Optional[StrictBool] = None,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -370,6 +1479,8 @@ class ResourcesApi:
         :type add_data_source_request: AddDataSourceRequest
         :param include_datasets:
         :type include_datasets: bool
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -395,6 +1506,7 @@ class ResourcesApi:
         _param = self._resource_add_datasource_serialize(
             add_data_source_request=add_data_source_request,
             include_datasets=include_datasets,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -421,6 +1533,7 @@ class ResourcesApi:
         self,
         add_data_source_request,
         include_datasets,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -446,6 +1559,10 @@ class ResourcesApi:
         if include_datasets is not None:
             
             _query_params.append(('include_datasets', include_datasets))
+            
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
             
         # process the header parameters
         # process the form parameters
@@ -503,9 +1620,10 @@ class ResourcesApi:
     @validate_call(config=ConfigDict(extra='ignore'))
     def connect(
         self,
-        resource_uuid: StrictStr,
+        uuid: StrictStr,
         add_user_to_resource_request: AddUserToResourceRequest,
         include_datasets: Optional[StrictBool] = None,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -523,12 +1641,14 @@ class ResourcesApi:
 
         Connect a user to resource connection
 
-        :param resource_uuid: (required)
-        :type resource_uuid: str
+        :param uuid: (required)
+        :type uuid: str
         :param add_user_to_resource_request: (required)
         :type add_user_to_resource_request: AddUserToResourceRequest
         :param include_datasets:
         :type include_datasets: bool
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -552,9 +1672,10 @@ class ResourcesApi:
         """ # noqa: E501
 
         _param = self._resource_connect_serialize(
-            resource_uuid=resource_uuid,
+            uuid=uuid,
             add_user_to_resource_request=add_user_to_resource_request,
             include_datasets=include_datasets,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -579,9 +1700,10 @@ class ResourcesApi:
 
     def _resource_connect_serialize(
         self,
-        resource_uuid,
+        uuid,
         add_user_to_resource_request,
         include_datasets,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -603,12 +1725,16 @@ class ResourcesApi:
         _body_params: Optional[bytes] = None
 
         # process the path parameters
-        if resource_uuid is not None:
-            _path_params['resource_uuid'] = resource_uuid
+        if uuid is not None:
+            _path_params['uuid'] = uuid
         # process the query parameters
         if include_datasets is not None:
             
             _query_params.append(('include_datasets', include_datasets))
+            
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
             
         # process the header parameters
         # process the form parameters
@@ -646,7 +1772,7 @@ class ResourcesApi:
 
         return self.api_client.param_serialize(
             method='POST',
-            resource_path='/resources/{resource_uuid}/connection',
+            resource_path='/resources/{uuid}/connection',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
@@ -679,7 +1805,7 @@ class ResourcesApi:
         _headers: Optional[Dict[StrictStr, Any]] = None,
         _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> List[ResponseResourceInfo]:
-        """Get Datasource Schemas
+        """Get Datasources Schemas
 
         Returns JSON schema of all sources
 
@@ -792,6 +1918,7 @@ class ResourcesApi:
     def delete_connection(
         self,
         resource_connection_deletion_request: ResourceConnectionDeletionRequest,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -811,6 +1938,8 @@ class ResourcesApi:
 
         :param resource_connection_deletion_request: (required)
         :type resource_connection_deletion_request: ResourceConnectionDeletionRequest
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -835,6 +1964,7 @@ class ResourcesApi:
 
         _param = self._resource_delete_connection_serialize(
             resource_connection_deletion_request=resource_connection_deletion_request,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -860,6 +1990,7 @@ class ResourcesApi:
     def _resource_delete_connection_serialize(
         self,
         resource_connection_deletion_request,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -882,6 +2013,10 @@ class ResourcesApi:
 
         # process the path parameters
         # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
@@ -938,8 +2073,9 @@ class ResourcesApi:
     @validate_call(config=ConfigDict(extra='ignore'))
     def get(
         self,
-        resource_uuid: StrictStr,
+        uuid: StrictStr,
         include_datasets: Optional[StrictBool] = None,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -957,10 +2093,12 @@ class ResourcesApi:
 
         Get information about the data source
 
-        :param resource_uuid: (required)
-        :type resource_uuid: str
+        :param uuid: (required)
+        :type uuid: str
         :param include_datasets:
         :type include_datasets: bool
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -984,8 +2122,9 @@ class ResourcesApi:
         """ # noqa: E501
 
         _param = self._resource_get_serialize(
-            resource_uuid=resource_uuid,
+            uuid=uuid,
             include_datasets=include_datasets,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1010,8 +2149,9 @@ class ResourcesApi:
 
     def _resource_get_serialize(
         self,
-        resource_uuid,
+        uuid,
         include_datasets,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -1033,12 +2173,16 @@ class ResourcesApi:
         _body_params: Optional[bytes] = None
 
         # process the path parameters
-        if resource_uuid is not None:
-            _path_params['resource_uuid'] = resource_uuid
+        if uuid is not None:
+            _path_params['uuid'] = uuid
         # process the query parameters
         if include_datasets is not None:
             
             _query_params.append(('include_datasets', include_datasets))
+            
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
             
         # process the header parameters
         # process the form parameters
@@ -1061,7 +2205,159 @@ class ResourcesApi:
 
         return self.api_client.param_serialize(
             method='GET',
-            resource_path='/resources/{resource_uuid}',
+            resource_path='/resources/{uuid}',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+    @callback_on_exception
+    @auto_fill_args
+    @validate_call(config=ConfigDict(extra='ignore'))
+    def get_files(
+        self,
+        uuid: StrictStr,
+        key: Optional[StrictStr] = None,
+        settings: Optional[Any] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> Dict[str, ListedKey]:
+        """Get Resource Files
+
+        List files in directory. Only valid for FileSystem resources
+
+        :param uuid: (required)
+        :type uuid: str
+        :param key:
+        :type key: str
+        :param settings:
+        :type settings: object
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._resource_get_files_serialize(
+            uuid=uuid,
+            key=key,
+            settings=settings,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "Dict[str, ListedKey]",
+            '401': None,
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    def _resource_get_files_serialize(
+        self,
+        uuid,
+        key,
+        settings,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        if uuid is not None:
+            _path_params['uuid'] = uuid
+        # process the query parameters
+        if key is not None:
+            
+            _query_params.append(('key', key))
+            
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'OAuth2PasswordBearer'
+        ]
+
+        return self.api_client.param_serialize(
+            method='GET',
+            resource_path='/resources/{uuid}/files',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
@@ -1082,6 +2378,7 @@ class ResourcesApi:
     def list(
         self,
         include_datasets: Optional[StrictBool] = None,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1101,6 +2398,8 @@ class ResourcesApi:
 
         :param include_datasets:
         :type include_datasets: bool
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1125,6 +2424,7 @@ class ResourcesApi:
 
         _param = self._resource_list_serialize(
             include_datasets=include_datasets,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1150,6 +2450,7 @@ class ResourcesApi:
     def _resource_list_serialize(
         self,
         include_datasets,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -1175,6 +2476,10 @@ class ResourcesApi:
         if include_datasets is not None:
             
             _query_params.append(('include_datasets', include_datasets))
+            
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
             
         # process the header parameters
         # process the form parameters
@@ -1215,152 +2520,10 @@ class ResourcesApi:
     @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
-    def list_files(
-        self,
-        resource_uuid: StrictStr,
-        key: Optional[StrictStr] = None,
-        _request_timeout: Union[
-            None,
-            Annotated[StrictFloat, Field(gt=0)],
-            Tuple[
-                Annotated[StrictFloat, Field(gt=0)],
-                Annotated[StrictFloat, Field(gt=0)]
-            ]
-        ] = None,
-        _request_auth: Optional[Dict[StrictStr, Any]] = None,
-        _content_type: Optional[StrictStr] = None,
-        _headers: Optional[Dict[StrictStr, Any]] = None,
-        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
-    ) -> Dict[str, ListedKey]:
-        """Get Resource Files
-
-        List files in directory. Only valid for FileSystem resources
-
-        :param resource_uuid: (required)
-        :type resource_uuid: str
-        :param key:
-        :type key: str
-        :param _request_timeout: timeout setting for this request. If one
-                                 number provided, it will be total request
-                                 timeout. It can also be a pair (tuple) of
-                                 (connection, read) timeouts.
-        :type _request_timeout: int, tuple(int, int), optional
-        :param _request_auth: set to override the auth_settings for an a single
-                              request; this effectively ignores the
-                              authentication in the spec for a single request.
-        :type _request_auth: dict, optional
-        :param _content_type: force content-type for the request.
-        :type _content_type: str, Optional
-        :param _headers: set to override the headers for a single
-                         request; this effectively ignores the headers
-                         in the spec for a single request.
-        :type _headers: dict, optional
-        :param _host_index: set to override the host_index for a single
-                            request; this effectively ignores the host_index
-                            in the spec for a single request.
-        :type _host_index: int, optional
-        :return: Returns the result object.
-        """ # noqa: E501
-
-        _param = self._resource_list_files_serialize(
-            resource_uuid=resource_uuid,
-            key=key,
-            _request_auth=_request_auth,
-            _content_type=_content_type,
-            _headers=_headers,
-            _host_index=_host_index
-        )
-
-        _response_types_map: Dict[str, Optional[str]] = {
-            '200': "Dict[str, ListedKey]",
-            '401': None,
-            '422': "HTTPValidationError",
-        }
-        response_data = self.api_client.call_api(
-            *_param,
-            _request_timeout=_request_timeout
-        )
-        response_data.read()
-        return self.api_client.response_deserialize(
-            response_data=response_data,
-            response_types_map=_response_types_map,
-        ).data
-
-
-    def _resource_list_files_serialize(
-        self,
-        resource_uuid,
-        key,
-        _request_auth,
-        _content_type,
-        _headers,
-        _host_index,
-    ) -> RequestSerialized:
-
-        _host = None
-
-        _collection_formats: Dict[str, str] = {
-        }
-
-        _path_params: Dict[str, str] = {}
-        _query_params: List[Tuple[str, str]] = []
-        _header_params: Dict[str, Optional[str]] = _headers or {}
-        _form_params: List[Tuple[str, str]] = []
-        _files: Dict[
-            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
-        ] = {}
-        _body_params: Optional[bytes] = None
-
-        # process the path parameters
-        if resource_uuid is not None:
-            _path_params['resource_uuid'] = resource_uuid
-        # process the query parameters
-        if key is not None:
-            
-            _query_params.append(('key', key))
-            
-        # process the header parameters
-        # process the form parameters
-        # process the body parameter
-
-
-        # set the HTTP header `Accept`
-        if 'Accept' not in _header_params:
-            _header_params['Accept'] = self.api_client.select_header_accept(
-                [
-                    'application/json'
-                ]
-            )
-
-
-        # authentication setting
-        _auth_settings: List[str] = [
-            'OAuth2PasswordBearer'
-        ]
-
-        return self.api_client.param_serialize(
-            method='GET',
-            resource_path='/resources/{resource_uuid}/files',
-            path_params=_path_params,
-            query_params=_query_params,
-            header_params=_header_params,
-            body=_body_params,
-            post_params=_form_params,
-            files=_files,
-            auth_settings=_auth_settings,
-            collection_formats=_collection_formats,
-            _host=_host,
-            _request_auth=_request_auth
-        )
-
-
-
-    @callback_on_exception
-    @auto_fill_args
-    @validate_call(config=ConfigDict(extra='ignore'))
     def refresh(
         self,
         refresh_resources_request: RefreshResourcesRequest,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1380,6 +2543,8 @@ class ResourcesApi:
 
         :param refresh_resources_request: (required)
         :type refresh_resources_request: RefreshResourcesRequest
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1404,6 +2569,7 @@ class ResourcesApi:
 
         _param = self._resource_refresh_serialize(
             refresh_resources_request=refresh_resources_request,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1429,6 +2595,7 @@ class ResourcesApi:
     def _resource_refresh_serialize(
         self,
         refresh_resources_request,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -1451,6 +2618,10 @@ class ResourcesApi:
 
         # process the path parameters
         # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
@@ -1508,6 +2679,7 @@ class ResourcesApi:
     def schema(
         self,
         resource_kind: StrictStr,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1527,6 +2699,8 @@ class ResourcesApi:
 
         :param resource_kind: (required)
         :type resource_kind: str
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1551,6 +2725,7 @@ class ResourcesApi:
 
         _param = self._resource_schema_serialize(
             resource_kind=resource_kind,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1576,6 +2751,7 @@ class ResourcesApi:
     def _resource_schema_serialize(
         self,
         resource_kind,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -1601,6 +2777,10 @@ class ResourcesApi:
         if resource_kind is not None:
             
             _query_params.append(('resource_kind', resource_kind))
+            
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
             
         # process the header parameters
         # process the form parameters
@@ -1766,7 +2946,7 @@ class ResourcesApi:
     @callback_on_exception
     @auto_fill_args
     @validate_call(config=ConfigDict(extra='ignore'))
-    def tool_schemas(
+    def tools_schemas(
         self,
         _request_timeout: Union[
             None,
@@ -1807,7 +2987,7 @@ class ResourcesApi:
         :return: Returns the result object.
         """ # noqa: E501
 
-        _param = self._resource_tool_schemas_serialize(
+        _param = self._resource_tools_schemas_serialize(
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1829,7 +3009,7 @@ class ResourcesApi:
         ).data
 
 
-    def _resource_tool_schemas_serialize(
+    def _resource_tools_schemas_serialize(
         self,
         _request_auth,
         _content_type,
@@ -1893,8 +3073,9 @@ class ResourcesApi:
     @validate_call(config=ConfigDict(extra='ignore'))
     def update(
         self,
-        resource_uuid: StrictStr,
+        uuid: StrictStr,
         update_user_resource_request: UpdateUserResourceRequest,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1912,10 +3093,12 @@ class ResourcesApi:
 
         Update a user resource
 
-        :param resource_uuid: (required)
-        :type resource_uuid: str
+        :param uuid: (required)
+        :type uuid: str
         :param update_user_resource_request: (required)
         :type update_user_resource_request: UpdateUserResourceRequest
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1939,8 +3122,9 @@ class ResourcesApi:
         """ # noqa: E501
 
         _param = self._resource_update_serialize(
-            resource_uuid=resource_uuid,
+            uuid=uuid,
             update_user_resource_request=update_user_resource_request,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1965,8 +3149,9 @@ class ResourcesApi:
 
     def _resource_update_serialize(
         self,
-        resource_uuid,
+        uuid,
         update_user_resource_request,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -1988,9 +3173,13 @@ class ResourcesApi:
         _body_params: Optional[bytes] = None
 
         # process the path parameters
-        if resource_uuid is not None:
-            _path_params['resource_uuid'] = resource_uuid
+        if uuid is not None:
+            _path_params['uuid'] = uuid
         # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
@@ -2027,7 +3216,7 @@ class ResourcesApi:
 
         return self.api_client.param_serialize(
             method='POST',
-            resource_path='/resources/{resource_uuid}/update',
+            resource_path='/resources/{uuid}/update',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,
@@ -2048,6 +3237,7 @@ class ResourcesApi:
     def file_credentials_fileupload_post(
         self,
         file: Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]],
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -2067,6 +3257,8 @@ class ResourcesApi:
 
         :param file: (required)
         :type file: bytearray
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -2091,6 +3283,7 @@ class ResourcesApi:
 
         _param = self._upload_file_credentials_fileupload_post_serialize(
             file=file,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -2116,6 +3309,7 @@ class ResourcesApi:
     def _upload_file_credentials_fileupload_post_serialize(
         self,
         file,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -2138,6 +3332,10 @@ class ResourcesApi:
 
         # process the path parameters
         # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
         # process the header parameters
         # process the form parameters
         if file is not None:

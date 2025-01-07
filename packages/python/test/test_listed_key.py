@@ -40,7 +40,8 @@ class TestListedKey(unittest.TestCase):
                 is_dir = True,
                 depth = 56,
                 date_created = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
-                date_modified = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f')
+                date_modified = datetime.datetime.strptime('2013-10-20 19:20:30.00', '%Y-%m-%d %H:%M:%S.%f'),
+                suggested_name = ''
             )
         else:
             return ListedKey(

@@ -33,7 +33,8 @@ class ListedKey(BaseModel):
     depth: StrictInt
     date_created: Optional[datetime] = None
     date_modified: Optional[datetime] = None
-    __properties: ClassVar[List[str]] = ["key", "name", "is_dir", "depth", "date_created", "date_modified"]
+    suggested_name: Optional[StrictStr] = None
+    __properties: ClassVar[List[str]] = ["key", "name", "is_dir", "depth", "date_created", "date_modified", "suggested_name"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -84,6 +85,11 @@ class ListedKey(BaseModel):
         if self.date_modified is None and "date_modified" in self.model_fields_set:
             _dict['date_modified'] = None
 
+        # set to None if suggested_name (nullable) is None
+        # and model_fields_set contains the field
+        if self.suggested_name is None and "suggested_name" in self.model_fields_set:
+            _dict['suggested_name'] = None
+
         return _dict
 
     @classmethod
@@ -101,6 +107,7 @@ class ListedKey(BaseModel):
             "is_dir": obj.get("is_dir"),
             "depth": obj.get("depth"),
             "date_created": obj.get("date_created"),
-            "date_modified": obj.get("date_modified")
+            "date_modified": obj.get("date_modified"),
+            "suggested_name": obj.get("suggested_name")
         })
         return _obj

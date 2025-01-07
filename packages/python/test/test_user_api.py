@@ -103,6 +103,20 @@ class TestUserApi(unittest.TestCase):
         """
         pass
 
+    def test_update_current_user_announcement_users_update_active_announcement_post(self) -> None:
+        """Test case for update_current_user_announcement_users_update_active_announcement_post
+
+        Update Current User Announcement
+        """
+        pass
+
+    def test_update_current_user_membership_type_users_update_membership_type_post(self) -> None:
+        """Test case for update_current_user_membership_type_users_update_membership_type_post
+
+        Update Current User Membership Type
+        """
+        pass
+
 
 if __name__ == '__main__':
     unittest.main()

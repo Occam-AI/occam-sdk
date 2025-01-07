@@ -19,6 +19,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, StrictStr
 from typing import Any, ClassVar, Dict, List
+from occam_sdk.models.membership_type import MembershipType
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -27,8 +28,10 @@ class UserCreateRequest(BaseModel):
     UserCreateRequest
     """ # noqa: E501
     email: StrictStr
+    name: StrictStr
     password: StrictStr
-    __properties: ClassVar[List[str]] = ["email", "password"]
+    membership_type: MembershipType
+    __properties: ClassVar[List[str]] = ["email", "name", "password", "membership_type"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -82,6 +85,8 @@ class UserCreateRequest(BaseModel):
 
         _obj = cls.model_validate({
             "email": obj.get("email"),
-            "password": obj.get("password")
+            "name": obj.get("name"),
+            "password": obj.get("password"),
+            "membership_type": obj.get("membership_type")
         })
         return _obj

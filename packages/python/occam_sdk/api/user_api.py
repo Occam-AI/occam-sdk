@@ -17,12 +17,14 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
 from pydantic import StrictStr, field_validator
-from typing import Any, List
+from typing import Any, List, Optional
 from occam_sdk.models.connector_schema import ConnectorSchema
 from occam_sdk.models.merge_link_token_response import MergeLinkTokenResponse
 from occam_sdk.models.merge_public_token_request import MergePublicTokenRequest
 from occam_sdk.models.redirect_to_response import RedirectToResponse
 from occam_sdk.models.uuid_response import UUIDResponse
+from occam_sdk.models.update_membership_type_request import UpdateMembershipTypeRequest
+from occam_sdk.models.update_user_active_announcement_request import UpdateUserActiveAnnouncementRequest
 from occam_sdk.models.user_create_request import UserCreateRequest
 from occam_sdk.models.user_response import UserResponse
 from occam_sdk.models.user_update_password_request import UserUpdatePasswordRequest
@@ -60,6 +62,7 @@ class UserApi:
     @validate_call(config=ConfigDict(extra='ignore'))
     def current_user_users_me_delete(
         self,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -77,6 +80,8 @@ class UserApi:
 
         Delete current user
 
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -100,6 +105,7 @@ class UserApi:
         """ # noqa: E501
 
         _param = self._delete_current_user_users_me_delete_serialize(
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -109,6 +115,7 @@ class UserApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '204': None,
             '401': None,
+            '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -123,6 +130,7 @@ class UserApi:
 
     def _delete_current_user_users_me_delete_serialize(
         self,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -145,6 +153,10 @@ class UserApi:
 
         # process the path parameters
         # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
@@ -186,6 +198,7 @@ class UserApi:
     @validate_call(config=ConfigDict(extra='ignore'))
     def connector_schemas_connectors_schemas_get(
         self,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -203,6 +216,8 @@ class UserApi:
 
         Get the JSON schema for all available connectors
 
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -226,6 +241,7 @@ class UserApi:
         """ # noqa: E501
 
         _param = self._get_connector_schemas_connectors_schemas_get_serialize(
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -235,6 +251,7 @@ class UserApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "List[ConnectorSchema]",
             '401': None,
+            '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -249,6 +266,7 @@ class UserApi:
 
     def _get_connector_schemas_connectors_schemas_get_serialize(
         self,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -271,6 +289,10 @@ class UserApi:
 
         # process the path parameters
         # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
@@ -314,6 +336,7 @@ class UserApi:
         self,
         state: Any,
         code: Any,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -334,6 +357,8 @@ class UserApi:
         :type state: object
         :param code: (required)
         :type code: object
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -359,6 +384,7 @@ class UserApi:
         _param = self._google_oauth_end_integrations_oauth_google_end_get_serialize(
             state=state,
             code=code,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -385,6 +411,7 @@ class UserApi:
         self,
         state,
         code,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -414,6 +441,10 @@ class UserApi:
         if code is not None:
             
             _query_params.append(('code', code))
+            
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
             
         # process the header parameters
         # process the form parameters
@@ -456,6 +487,7 @@ class UserApi:
     def oauth_end_integrations_oauth_isolated_end_get(
         self,
         state: StrictStr,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -474,6 +506,8 @@ class UserApi:
 
         :param state: (required)
         :type state: str
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -498,6 +532,7 @@ class UserApi:
 
         _param = self._isolated_oauth_end_integrations_oauth_isolated_end_get_serialize(
             state=state,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -523,6 +558,7 @@ class UserApi:
     def _isolated_oauth_end_integrations_oauth_isolated_end_get_serialize(
         self,
         state,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -548,6 +584,10 @@ class UserApi:
         if state is not None:
             
             _query_params.append(('state', state))
+            
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
             
         # process the header parameters
         # process the form parameters
@@ -591,6 +631,7 @@ class UserApi:
     def confirm_integrations_merge_confirm_post(
         self,
         merge_public_token_request: MergePublicTokenRequest,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -609,6 +650,8 @@ class UserApi:
 
         :param merge_public_token_request: (required)
         :type merge_public_token_request: MergePublicTokenRequest
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -633,6 +676,7 @@ class UserApi:
 
         _param = self._merge_confirm_integrations_merge_confirm_post_serialize(
             merge_public_token_request=merge_public_token_request,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -658,6 +702,7 @@ class UserApi:
     def _merge_confirm_integrations_merge_confirm_post_serialize(
         self,
         merge_public_token_request,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -680,6 +725,10 @@ class UserApi:
 
         # process the path parameters
         # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
@@ -737,6 +786,7 @@ class UserApi:
     def link_token_integrations_merge_link_token_get(
         self,
         resource_kind: StrictStr,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -755,6 +805,8 @@ class UserApi:
 
         :param resource_kind: (required)
         :type resource_kind: str
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -779,6 +831,7 @@ class UserApi:
 
         _param = self._merge_link_token_integrations_merge_link_token_get_serialize(
             resource_kind=resource_kind,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -804,6 +857,7 @@ class UserApi:
     def _merge_link_token_integrations_merge_link_token_get_serialize(
         self,
         resource_kind,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -829,6 +883,10 @@ class UserApi:
         if resource_kind is not None:
             
             _query_params.append(('resource_kind', resource_kind))
+            
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
             
         # process the header parameters
         # process the form parameters
@@ -873,6 +931,7 @@ class UserApi:
         self,
         state: Any,
         code: Any,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -893,6 +952,8 @@ class UserApi:
         :type state: object
         :param code: (required)
         :type code: object
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -918,6 +979,7 @@ class UserApi:
         _param = self._oauth_end_integrations_oauth_end_get_serialize(
             state=state,
             code=code,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -944,6 +1006,7 @@ class UserApi:
         self,
         state,
         code,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -973,6 +1036,10 @@ class UserApi:
         if code is not None:
             
             _query_params.append(('code', code))
+            
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
             
         # process the header parameters
         # process the form parameters
@@ -1016,6 +1083,7 @@ class UserApi:
         self,
         resource_kind: StrictStr,
         redirect_url: StrictStr,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1036,6 +1104,8 @@ class UserApi:
         :type resource_kind: str
         :param redirect_url: (required)
         :type redirect_url: str
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1061,6 +1131,7 @@ class UserApi:
         _param = self._oauth_start_integrations_oauth_start_get_serialize(
             resource_kind=resource_kind,
             redirect_url=redirect_url,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1087,6 +1158,7 @@ class UserApi:
         self,
         resource_kind,
         redirect_url,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -1116,6 +1188,10 @@ class UserApi:
         if redirect_url is not None:
             
             _query_params.append(('redirect_url', redirect_url))
+            
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
             
         # process the header parameters
         # process the form parameters
@@ -1158,6 +1234,7 @@ class UserApi:
     @validate_call(config=ConfigDict(extra='ignore'))
     def current_user_users_me_get(
         self,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1175,6 +1252,8 @@ class UserApi:
 
         Get current user
 
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1198,6 +1277,7 @@ class UserApi:
         """ # noqa: E501
 
         _param = self._read_current_user_users_me_get_serialize(
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1207,6 +1287,7 @@ class UserApi:
         _response_types_map: Dict[str, Optional[str]] = {
             '200': "UserResponse",
             '401': None,
+            '422': "HTTPValidationError",
         }
         response_data = self.api_client.call_api(
             *_param,
@@ -1221,6 +1302,7 @@ class UserApi:
 
     def _read_current_user_users_me_get_serialize(
         self,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -1243,6 +1325,10 @@ class UserApi:
 
         # process the path parameters
         # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
@@ -1285,6 +1371,7 @@ class UserApi:
     def new_user_users_register_post(
         self,
         user_create_request: UserCreateRequest,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1304,6 +1391,8 @@ class UserApi:
 
         :param user_create_request: (required)
         :type user_create_request: UserCreateRequest
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1328,6 +1417,7 @@ class UserApi:
 
         _param = self._register_new_user_users_register_post_serialize(
             user_create_request=user_create_request,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1353,6 +1443,7 @@ class UserApi:
     def _register_new_user_users_register_post_serialize(
         self,
         user_create_request,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -1375,6 +1466,10 @@ class UserApi:
 
         # process the path parameters
         # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
@@ -1431,6 +1526,7 @@ class UserApi:
     def current_user_password_users_reset_password_post(
         self,
         user_update_password_request: UserUpdatePasswordRequest,
+        settings: Optional[Any] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -1450,6 +1546,8 @@ class UserApi:
 
         :param user_update_password_request: (required)
         :type user_update_password_request: UserUpdatePasswordRequest
+        :param settings:
+        :type settings: object
         :param _request_timeout: timeout setting for this request. If one
                                  number provided, it will be total request
                                  timeout. It can also be a pair (tuple) of
@@ -1474,6 +1572,7 @@ class UserApi:
 
         _param = self._reset_current_user_password_users_reset_password_post_serialize(
             user_update_password_request=user_update_password_request,
+            settings=settings,
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
@@ -1499,6 +1598,7 @@ class UserApi:
     def _reset_current_user_password_users_reset_password_post_serialize(
         self,
         user_update_password_request,
+        settings,
         _request_auth,
         _content_type,
         _headers,
@@ -1521,6 +1621,10 @@ class UserApi:
 
         # process the path parameters
         # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
         # process the header parameters
         # process the form parameters
         # process the body parameter
@@ -1558,6 +1662,318 @@ class UserApi:
         return self.api_client.param_serialize(
             method='POST',
             resource_path='/users/reset-password',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+    @callback_on_exception
+    @auto_fill_args
+    @validate_call(config=ConfigDict(extra='ignore'))
+    def current_user_announcement_users_update_active_announcement_post(
+        self,
+        update_user_active_announcement_request: UpdateUserActiveAnnouncementRequest,
+        settings: Optional[Any] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> object:
+        """Update Current User Announcement
+
+        Update current user announcement
+
+        :param update_user_active_announcement_request: (required)
+        :type update_user_active_announcement_request: UpdateUserActiveAnnouncementRequest
+        :param settings:
+        :type settings: object
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._update_current_user_announcement_users_update_active_announcement_post_serialize(
+            update_user_active_announcement_request=update_user_active_announcement_request,
+            settings=settings,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "object",
+            '401': None,
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    def _update_current_user_announcement_users_update_active_announcement_post_serialize(
+        self,
+        update_user_active_announcement_request,
+        settings,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+        if update_user_active_announcement_request is not None:
+            _body_params = update_user_active_announcement_request
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params['Content-Type'] = _content_type
+        else:
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json'
+                    ]
+                )
+            )
+            if _default_content_type is not None:
+                _header_params['Content-Type'] = _default_content_type
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'OAuth2PasswordBearer'
+        ]
+
+        return self.api_client.param_serialize(
+            method='POST',
+            resource_path='/users/update-active-announcement',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+    @callback_on_exception
+    @auto_fill_args
+    @validate_call(config=ConfigDict(extra='ignore'))
+    def current_user_membership_type_users_update_membership_type_post(
+        self,
+        update_membership_type_request: UpdateMembershipTypeRequest,
+        settings: Optional[Any] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> UserResponse:
+        """Update Current User Membership Type
+
+        Update current user membership type
+
+        :param update_membership_type_request: (required)
+        :type update_membership_type_request: UpdateMembershipTypeRequest
+        :param settings:
+        :type settings: object
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._update_current_user_membership_type_users_update_membership_type_post_serialize(
+            update_membership_type_request=update_membership_type_request,
+            settings=settings,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "UserResponse",
+            '401': None,
+            '422': "HTTPValidationError",
+        }
+        response_data = self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    def _update_current_user_membership_type_users_update_membership_type_post_serialize(
+        self,
+        update_membership_type_request,
+        settings,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        # process the query parameters
+        if settings is not None:
+            
+            _query_params.append(('settings', settings))
+            
+        # process the header parameters
+        # process the form parameters
+        # process the body parameter
+        if update_membership_type_request is not None:
+            _body_params = update_membership_type_request
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params['Content-Type'] = _content_type
+        else:
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json'
+                    ]
+                )
+            )
+            if _default_content_type is not None:
+                _header_params['Content-Type'] = _default_content_type
+
+        # authentication setting
+        _auth_settings: List[str] = [
+            'OAuth2PasswordBearer'
+        ]
+
+        return self.api_client.param_serialize(
+            method='POST',
+            resource_path='/users/update-membership-type',
             path_params=_path_params,
             query_params=_query_params,
             header_params=_header_params,

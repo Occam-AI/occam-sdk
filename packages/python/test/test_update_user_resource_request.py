@@ -35,11 +35,11 @@ class TestUpdateUserResourceRequest(unittest.TestCase):
         model = UpdateUserResourceRequest()
         if include_optional:
             return UpdateUserResourceRequest(
-                instance_display_name = ''
+                instance_display_name = '',
+                description = ''
             )
         else:
             return UpdateUserResourceRequest(
-                instance_display_name = '',
         )
         """
 

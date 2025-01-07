@@ -31,7 +31,7 @@ class OccamLLMMessage(BaseModel):
     content: Content
     role: LLMRole
     name: Optional[StrictStr] = None
-    parsed: Optional[Dict[str, Any]] = None
+    parsed: Optional[Any] = None
     __properties: ClassVar[List[str]] = ["content", "role", "name", "parsed"]
 
     model_config = ConfigDict(
@@ -76,10 +76,18 @@ class OccamLLMMessage(BaseModel):
         # override the default output from pydantic by calling `to_dict()` of content
         if self.content:
             _dict['content'] = self.content.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of parsed
+        if self.parsed:
+            _dict['parsed'] = self.parsed.to_dict()
         # set to None if name (nullable) is None
         # and model_fields_set contains the field
         if self.name is None and "name" in self.model_fields_set:
             _dict['name'] = None
+
+        # set to None if parsed (nullable) is None
+        # and model_fields_set contains the field
+        if self.parsed is None and "parsed" in self.model_fields_set:
+            _dict['parsed'] = None
 
         return _dict
 
@@ -96,6 +104,6 @@ class OccamLLMMessage(BaseModel):
             "content": Content.from_dict(obj["content"]) if obj.get("content") is not None else None,
             "role": obj.get("role"),
             "name": obj.get("name"),
-            "parsed": obj.get("parsed")
+            "parsed": AnyOf.from_dict(obj["parsed"]) if obj.get("parsed") is not None else None
         })
         return _obj

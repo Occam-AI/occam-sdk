@@ -5,7 +5,8 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**instance_display_name** | **str** |  | 
+**instance_display_name** | **str** |  | [optional] 
+**description** | **str** |  | [optional] 
 
 ## Example
 

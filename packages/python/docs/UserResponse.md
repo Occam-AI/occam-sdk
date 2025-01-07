@@ -7,6 +7,8 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **uuid** | **str** |  | 
 **email** | **str** |  | 
+**name** | **str** |  | 
+**membership_type** | [**MembershipType**](MembershipType.md) |  | 
 
 ## Example
 

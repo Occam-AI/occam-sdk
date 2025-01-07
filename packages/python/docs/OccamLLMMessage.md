@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 **content** | [**Content**](Content.md) |  | 
 **role** | [**LLMRole**](LLMRole.md) |  | 
 **name** | **str** |  | [optional] 
-**parsed** | **object** |  | [optional] 
+**parsed** | [**AnyOf**](AnyOf.md) |  | [optional] 
 
 ## Example
 
