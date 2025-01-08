@@ -1,13 +1,12 @@
 from typing import Any, Dict, Optional
 
 import requests
+from urllib.parse import quote
 from occam_core.agents.model import AgentIdentityCoreModel, AgentIOModel
 from occam_core.util.base_models import ParamsIOModel
 
-from python.occam_sdk.util import (AgentFetchError, AgentInstanceFetchError,
-                                   AgentInstanceMetadata,
-                                   AgentInstantiationError,
-                                   AgentInstantiationResponse, AgentRunDetail)
+from occam_sdk.util import (AgentFetchError, AgentInstanceFetchError,
+                            AgentInstantiationError, AgentRunDetail)
 
 
 class AgentsApi:
@@ -45,7 +44,9 @@ class AgentsApi:
         Corresponds to GET /agents/{agent_name}
         Returns the metadata of the specified agent.
         """
-        url = f"{self._base_url}/agents/{agent_name}"
+        # Agent name might include "/" or other special characters that would mess up the URL
+        encoded_agent_name = quote(agent_name, safe='')
+        url = f"{self._base_url}/agents/{encoded_agent_name}"
         resp = requests.get(url, headers=self._headers(), timeout=10)
         resp.raise_for_status()
         identity_dict = resp.json()
@@ -53,21 +54,22 @@ class AgentsApi:
             return AgentFetchError.model_validate(identity_dict)
         return AgentIdentityCoreModel.model_validate(identity_dict)
 
-    def instantiate_agent(self, agent_name: str, agent_params_model: ParamsIOModel) -> AgentInstanceMetadata | AgentInstantiationError:
+    def instantiate_agent(self, agent_name: str, agent_params_model: ParamsIOModel) -> Dict[str, AgentIdentityCoreModel] | AgentInstantiationError:
         """
         Corresponds to POST /agents/{agent_name}/create
         Creates an instance of an agent.
         """
         if not isinstance(agent_params_model, ParamsIOModel):
             raise ValueError("agent_params_model must be an instance of ParamsIOModel")
-        url = f"{self._base_url}/agents/{agent_name}/instantiate"
+        encoded_name = quote(agent_name, safe='')
+        url = f"{self._base_url}/agents/{encoded_name}/instantiate"
         agent_params = agent_params_model.model_dump()
         resp = requests.post(url, headers=self._headers(), json=agent_params, timeout=10)
         resp.raise_for_status()
         response_dict = resp.json()
         if "error_type" in response_dict:
             return AgentInstantiationError.model_validate(response_dict)
-        return AgentInstanceMetadata.model_validate(response_dict)
+        return {response_dict["agent_instance_id"]: AgentIdentityCoreModel.model_validate(response_dict["agent_identity"])}
 
     def run_agent(self, agent_instance_id: str, agent_input_model: AgentIOModel) -> AgentRunDetail | AgentInstanceFetchError:
         """
@@ -77,7 +79,7 @@ class AgentsApi:
         if not isinstance(agent_input_model, AgentIOModel):
             raise ValueError("agent_input_model must be an instance of AgentIOModel")
         url = f"{self._base_url}/agents/{agent_instance_id}/run"
-        agent_input = agent_input_model.model_dump()
+        agent_input = {"inputs": agent_input_model.model_dump()}
         resp = requests.post(url, headers=self._headers(), json=agent_input, timeout=10)
         resp.raise_for_status()
         response_dict = resp.json()
@@ -87,24 +89,25 @@ class AgentsApi:
 
     def get_agent_run_status(self, agent_run_instance_id: str) -> AgentRunDetail | AgentInstanceFetchError:
         """
-        Corresponds to GET /agents/{agent_run_instance_id}/status
+        Corresponds to GET /agents/run/{agent_run_instance_id}/status
         Returns the status of the specified agent run.
         """
-        url = f"{self._base_url}/agents/run/{agent_run_instance_id}/status"
-        resp = requests.get(url, headers=self._headers(), timeout=10)
+        url = f"{self._base_url}/agents/{agent_run_instance_id}/run/status"
+        resp = requests.post(url, headers=self._headers(), timeout=10)
         resp.raise_for_status()
         response_dict = resp.json()
         if "error_type" in response_dict:
             return AgentInstanceFetchError.model_validate(response_dict)
+        response_dict["agent_run_instance_id"] = agent_run_instance_id
         return AgentRunDetail.model_validate(response_dict)
 
     def get_agent_run_result(self, agent_run_instance_id: str) -> AgentIOModel | AgentInstanceFetchError:
         """
-        Corresponds to GET /agents/{agent_run_instance_id}/result
+        Corresponds to GET /agents/run/{agent_run_instance_id}/result
         Returns the results of the specified agent run.
         """
-        url = f"{self._base_url}/agents/run/{agent_run_instance_id}/result"
-        resp = requests.get(url, headers=self._headers(), timeout=10)
+        url = f"{self._base_url}/agents/{agent_run_instance_id}/run/result"
+        resp = requests.post(url, headers=self._headers(), timeout=10)
         resp.raise_for_status()
 
         response_dict = resp.json()
