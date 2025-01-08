@@ -29,11 +29,11 @@ if __name__ == "__main__":
             # ...
         )
     )
-    print(f"Created agent: {agent_instantiation_response.response_model.agent_instance_id}")
+    print(f"Created agent: {agent_instantiation_response.agent_instance_id}")
 
     # Run the agent
     agent_run = client.agents.run_agent(
-        agent_instance_id=agent_instantiation_response.response_model.agent_instance_id,
+        agent_instance_id=agent_instantiation_response.agent_instance_id,
         agent_input_model=AgentIOModel(
             query="What is the weather in Tokyo?",
         )
