@@ -1,10 +1,9 @@
 
 import os
-from occam_sdk.api_client import OccamClient
 
-from occam_core.base_models import ParamsIOModel
 from occam_core.agents.model import AgentIOModel
-
+from occam_core.util.base_models import ParamsIOModel
+from occam_sdk.api_client import OccamClient
 
 if __name__ == "__main__":
     api_key = os.getenv("OCCAM_API_KEY")
@@ -23,33 +22,26 @@ if __name__ == "__main__":
     # params_model = MODEL_CATALOGUE[some_agent.params_model_name]
 
     # Create a new agent instance
-    created_agent = client.agents.instantiate_agent(
+    agent_instantiation_response = client.agents.instantiate_agent(
         agent_name="WebBrowsingLlmTool",
         agent_params_model=ParamsIOModel(
             param1="value1",
             # ...
         )
     )
-    print(f"Created agent: {created_agent}")
+    print(f"Created agent: {agent_instantiation_response.response_model.agent_instance_id}")
 
     # Run the agent
     agent_run = client.agents.run_agent(
-        agent_instance_id=created_agent["agent_instance_id"],
-        request_body={
-            "inputs": [
-                AgentIOModel(
-                    input1="value1",
-                ),
-                AgentIOModel(
-                    input2="value2",
-                ),
-            ]
-        }
+        agent_instance_id=agent_instantiation_response.response_model.agent_instance_id,
+        agent_input_model=AgentIOModel(
+            query="What is the weather in Tokyo?",
+        )
     )
 
     # Check status
-    run_status = client.agents.get_agent_run_status(agent_run["agent_run_instance_id"])
+    run_status = client.agents.get_agent_run_status(agent_instantiation_response.agent_instance_id)
     # Get run result
-    run_result = client.agents.get_agent_run_result(agent_run["agent_run_instance_id"])
+    run_result = client.agents.get_agent_run_result(agent_instantiation_response.agent_instance_id)
     print(run_status)
     print(run_result)
