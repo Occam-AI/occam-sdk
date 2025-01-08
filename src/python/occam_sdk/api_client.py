@@ -1,5 +1,7 @@
 import requests
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any
+from occam_core.base_models import ParamsIOModel
+from occam_core.agents.model import AgentIOModel, AgentIdentityCoreModel 
 
 
 class OccamClient:
@@ -80,7 +82,7 @@ class AgentsApi:
             "Content-Type": "application/json",
         }
 
-    def list_agents(self) -> List[Dict[str, Any]]:
+    def get_agents_catalogue(self) -> Dict[str, AgentIdentityCoreModel]:
         """
         Corresponds to GET /agents
         Returns a list of agents available to the current user.
@@ -88,9 +90,11 @@ class AgentsApi:
         url = f"{self._base_url}/agents"
         resp = requests.get(url, headers=self._headers(), timeout=10)
         resp.raise_for_status()
-        return resp.json()
+        agent_catalogue_dict = resp.json()
+        return {agent_name: AgentIdentityCoreModel.model_validate(agent_dict)
+                for agent_name, agent_dict in agent_catalogue_dict.items()}
 
-    def get_agent(self, agent_name: str) -> Dict[str, Any]:
+    def get_agent(self, agent_name: str) -> AgentIdentityCoreModel:
         """
         Corresponds to GET /agents/{agent_name}
         Returns the metadata of the specified agent.
@@ -98,25 +102,28 @@ class AgentsApi:
         url = f"{self._base_url}/agents/{agent_name}"
         resp = requests.get(url, headers=self._headers(), timeout=10)
         resp.raise_for_status()
-        return resp.json()
+        identity_dict = resp.json()
+        return AgentIdentityCoreModel.model_validate(identity_dict)
 
-    def create_agent(self, agent_name: str, request_body: Dict[str, Any]) -> Dict[str, Any]:
+    def instantiate_agent(self, agent_name: str, agent_params_model: ParamsIOModel) -> AgentIdentityCoreModel:
         """
         Corresponds to POST /agents/{agent_name}/create
         Creates an instance of an agent.
         """
-        url = f"{self._base_url}/agents/{agent_name}/create"
-        resp = requests.post(url, headers=self._headers(), json=request_body, timeout=10)
+        url = f"{self._base_url}/agents/{agent_name}/instantiate"
+        agent_params = agent_params_model.model_dump()
+        resp = requests.post(url, headers=self._headers(), json=agent_params, timeout=10)
         resp.raise_for_status()
-        return resp.json()
+        return AgentIdentityCoreModel.model_validate(resp.json())
 
-    def run_agent(self, agent_instance_id: str, request_body: Dict[str, Any]) -> Dict[str, Any]:
+    def run_agent(self, agent_instance_id: str, agent_input_model: AgentIOModel) -> Dict[str, Any]:
         """
         Corresponds to POST /agents/{agent_instance_id}/run
         Runs the specified agent instance with provided input.
         """
         url = f"{self._base_url}/agents/{agent_instance_id}/run"
-        resp = requests.post(url, headers=self._headers(), json=request_body, timeout=10)
+        agent_input = agent_input_model.model_dump()
+        resp = requests.post(url, headers=self._headers(), json=agent_input, timeout=10)
         resp.raise_for_status()
         return resp.json()
 
@@ -130,8 +137,7 @@ class AgentsApi:
         resp.raise_for_status()
         return resp.json()
 
-
-    def get_agent_run_result(self, agent_run_instance_id: str) -> Dict[str, Any]:
+    def get_agent_run_result(self, agent_run_instance_id: str) -> AgentIOModel:
         """
         Corresponds to GET /agents/{agent_run_instance_id}/result
         Returns the results of the specified agent run.
@@ -139,4 +145,6 @@ class AgentsApi:
         url = f"{self._base_url}/agents/run/{agent_run_instance_id}/result"
         resp = requests.get(url, headers=self._headers(), timeout=10)
         resp.raise_for_status()
-        return resp.json()
+
+        output_dict = resp.json()
+        return AgentIOModel.model_validate(output_dict)

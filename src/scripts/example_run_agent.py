@@ -2,6 +2,9 @@
 import os
 from occam_sdk.api_client import OccamClient
 
+from occam_core.base_models import ParamsIOModel
+from occam_core.agents.model import AgentIOModel
+
 
 if __name__ == "__main__":
     api_key = os.getenv("OCCAM_API_KEY")
@@ -17,14 +20,15 @@ if __name__ == "__main__":
 
     # Get a specific agent
     some_agent = client.agents.get_agent(agent_name="WebBrowsingLlmTool")
+    # params_model = MODEL_CATALOGUE[some_agent.params_model_name]
 
     # Create a new agent instance
-    created_agent = client.agents.create_agent(
+    created_agent = client.agents.instantiate_agent(
         agent_name="WebBrowsingLlmTool",
-        request_body={
-            "param1": "value1",
+        agent_params_model=ParamsIOModel(
+            param1="value1",
             # ...
-        }
+        )
     )
     print(f"Created agent: {created_agent}")
 
@@ -33,12 +37,12 @@ if __name__ == "__main__":
         agent_instance_id=created_agent["agent_instance_id"],
         request_body={
             "inputs": [
-                {
-                    "input1": "value1",
-                },
-                {
-                    "input2": "value2",
-                },
+                AgentIOModel(
+                    input1="value1",
+                ),
+                AgentIOModel(
+                    input2="value2",
+                ),
             ]
         }
     )
