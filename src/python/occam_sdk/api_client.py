@@ -58,6 +58,8 @@ class AgentsApi:
         Corresponds to POST /agents/{agent_name}/create
         Creates an instance of an agent.
         """
+        if not isinstance(agent_params_model, ParamsIOModel):
+            raise ValueError("agent_params_model must be an instance of ParamsIOModel")
         url = f"{self._base_url}/agents/{agent_name}/instantiate"
         agent_params = agent_params_model.model_dump()
         resp = requests.post(url, headers=self._headers(), json=agent_params, timeout=10)
@@ -72,6 +74,8 @@ class AgentsApi:
         Corresponds to POST /agents/{agent_instance_id}/run
         Runs the specified agent instance with provided input.
         """
+        if not isinstance(agent_input_model, AgentIOModel):
+            raise ValueError("agent_input_model must be an instance of AgentIOModel")
         url = f"{self._base_url}/agents/{agent_instance_id}/run"
         agent_input = agent_input_model.model_dump()
         resp = requests.post(url, headers=self._headers(), json=agent_input, timeout=10)
