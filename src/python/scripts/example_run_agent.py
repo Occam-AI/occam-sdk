@@ -12,8 +12,8 @@ if __name__ == "__main__":
     client = OccamClient(api_key=api_key, base_url=base_url)
 
     # List agents
-    agents_list = client.agents.list_agents()
-    for agent in agents_list:
+    agents_catalogue = client.agents.get_agents_catalogue()
+    for agent in agents_catalogue:
         print(f"Agent: {agent}")
         print("======")
 

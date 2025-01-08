@@ -10,66 +10,6 @@ from python.occam_sdk.util import (AgentFetchError, AgentInstanceFetchError,
                                    AgentInstantiationResponse, AgentRunDetail)
 
 
-class OccamClient:
-    """
-    OccamClient provides a simple interface for authenticating with
-    the Occam API and calling agent endpoints.
-    """
-
-    def __init__(
-        self,
-        base_url: str = "https://api.occam.ai",
-        api_key: str = ""
-    ):
-        """
-        :param base_url: Base URL for the Occam API (defaults to https://api.occam.ai)
-        :param api_key: Your API key for Occam
-        """
-        self._base_url = base_url.rstrip("/")
-        self._api_key = api_key
-        self._access_token: Optional[str] = None
-        self._expires_at: Optional[int] = None
-        self._agents_api: Optional["AgentsApi"] = None
-
-        # Attempt authentication immediately so we fail fast if invalid
-        self._authenticate()
-
-    def _authenticate(self) -> None:
-        """
-        Perform auth using the provided API key.
-        Raises an exception if the key is invalid.
-        """
-        # The auth endpoint (GET /auth/access-token?key=...)
-        url = f"{self._base_url}/auth/access-token"
-        params = {"key": self._api_key}
-        response = requests.get(url, params=params, timeout=10)
-
-        if response.status_code != 200:
-            raise ValueError(
-                f"Authentication failed. Check API key. "
-                f"Status code: {response.status_code}. "
-                f"Details: {response.text}"
-            )
-
-        data = response.json()
-        self._access_token = data["access_token"]
-        self._expires_at = data.get("expires_at")  # In case you want to handle token exp later
-
-    @property
-    def agents(self) -> "AgentsApi":
-        """
-        Access the Agents endpoints. For example:
-            client.agents.list_agents()
-            client.agents.get_agent("SomeAgent")
-            client.agents.create_agent(agent_name="SomeAgent", request_body={...})
-            client.agents.run_agent(agent_instance_id="xxxx", request_body={...})
-            client.agents.get_agent_run_status("xxxx")
-        """
-        if self._agents_api is None:
-            self._agents_api = AgentsApi(base_url=self._base_url, access_token=self._access_token)
-        return self._agents_api
-
-
 class AgentsApi:
     """
     Simple wrapper for the /agents/ endpoints.
@@ -167,3 +107,64 @@ class AgentsApi:
         if "error_type" in response_dict:
             return AgentInstanceFetchError.model_validate(response_dict)
         return AgentIOModel.model_validate(response_dict)
+
+
+class OccamClient:
+    """
+    OccamClient provides a simple interface for authenticating with
+    the Occam API and calling agent endpoints.
+    """
+
+    def __init__(
+        self,
+        base_url: str = "https://api.occam.ai",
+        api_key: str = ""
+    ):
+        """
+        :param base_url: Base URL for the Occam API (defaults to https://api.occam.ai)
+        :param api_key: Your API key for Occam
+        """
+        self._base_url = base_url.rstrip("/")
+        self._api_key = api_key
+        self._access_token: Optional[str] = None
+        self._expires_at: Optional[int] = None
+        self._agents_api: Optional["AgentsApi"] = None
+
+        # Attempt authentication immediately so we fail fast if invalid
+        self._authenticate()
+
+    def _authenticate(self) -> None:
+        """
+        Perform auth using the provided API key.
+        Raises an exception if the key is invalid.
+        """
+        # The auth endpoint (GET /auth/access-token?key=...)
+        url = f"{self._base_url}/auth/access-token"
+        params = {"key": self._api_key}
+        response = requests.get(url, params=params, timeout=10)
+
+        if response.status_code != 200:
+            raise ValueError(
+                f"Authentication failed. Check API key. "
+                f"Status code: {response.status_code}. "
+                f"Details: {response.text}"
+            )
+
+        data = response.json()
+        self._access_token = data["access_token"]
+        self._expires_at = data.get("expires_at")  # In case you want to handle token exp later
+
+    @property
+    def agents(self) -> AgentsApi:
+        """
+        Access the Agents endpoints. For example:
+            client.agents.get_agents()
+            client.agents.get_agent("SomeAgent")
+            client.agents.instantiate_agent(agent_name="SomeAgent", agent_params_model={...})
+            client.agents.run_agent(agent_instance_id="xxxx", agent_input_model={...})
+            client.agents.get_agent_run_status("xxxx")
+            client.agents.get_agent_run_result("xxxx")
+        """
+        if self._agents_api is None:
+            self._agents_api = AgentsApi(base_url=self._base_url, access_token=self._access_token)
+        return self._agents_api
