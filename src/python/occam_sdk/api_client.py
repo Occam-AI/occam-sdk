@@ -1,3 +1,4 @@
+import time
 from typing import Any, Dict, Optional
 from urllib.parse import quote
 
@@ -38,7 +39,7 @@ class AgentsApi:
         return {agent_name: AgentIdentityCoreModel.model_validate(agent_dict)
                 for agent_name, agent_dict in agent_catalogue_dict.items()}
 
-    def get_agent(self, agent_name: str) -> AgentIdentityCoreModel | AgentSetupError:
+    def get_agent_metadata(self, agent_name: str) -> AgentIdentityCoreModel | AgentSetupError:
         """
         Corresponds to GET /agents/{agent_name}
         Returns the metadata of the specified agent.
@@ -70,7 +71,7 @@ class AgentsApi:
             return AgentSetupError.model_validate(response_dict)
         return AgentInstanceMetadata.model_validate(response_dict)
 
-    def run_agent(self, agent_instance_id: str, agent_input_model: AgentIOModel) -> AgentRunDetail | AgentSetupError:
+    def run_agent(self, agent_instance_id: str, agent_input_model: AgentIOModel, sync: bool = True) -> AgentRunDetail | AgentSetupError:
         """
         Corresponds to POST /agents/{agent_instance_id}/run
         Runs the specified agent instance with provided input.
@@ -84,6 +85,9 @@ class AgentsApi:
         response_dict = resp.json()
         if "error_type" in response_dict:
             return AgentSetupError.model_validate(response_dict)
+        if sync:
+            while self.get_agent_run_status(agent_run_instance_id=agent_instance_id).status != "completed":
+                time.sleep(1)
         return AgentRunDetail.model_validate(response_dict)
 
     def get_agent_run_status(self, agent_run_instance_id: str) -> AgentRunDetail | AgentSetupError:
