@@ -2,8 +2,9 @@
 import os
 from typing import Dict
 
-from occam_core.agents.model import AgentIOModel, AgentIdentityCoreModel
-from occam_core.model_catalogue import PARAMS_MODEL_CATALOGUE
+from occam_core.agents.model import AgentIdentityCoreModel, AgentIOModel
+from occam_core.model_catalogue import (PARAMS_MODEL_CATALOGUE,
+                                        EmailCommunicatorParamsModel)
 from occam_core.util.base_models import ParamsIOModel
 from occam_sdk.api_client import OccamClient
 
@@ -11,6 +12,13 @@ from occam_sdk.api_client import OccamClient
 def _select_agent(catalogue: Dict[str, AgentIdentityCoreModel]) -> str:
     # Select agent based on some criteria
     return "openai/o1"
+
+
+# NOTES: TODO: Mo/Ahmed
+
+# 1. support streaming
+# 2. hide partial params and figure out how to share params of agents.
+# 3. new end-points: terminate-agent, pause-agent, resume-agent, list-running-agents etc.
 
 
 if __name__ == "__main__":
@@ -31,16 +39,43 @@ if __name__ == "__main__":
     agent_name = _select_agent(agents_catalogue)
 
     # Get a specific agent
-    some_agent = client.agents.get_agent(agent_name=agent_name)
-    partial_params = some_agent.partial_params
+    some_agent = client.agents.get_agent_metadata(agent_name=agent_name)
+    # partial_params = some_agent.partial_params
     params_model = PARAMS_MODEL_CATALOGUE[some_agent.params_model_name]
+
+    user_agent_params  = Params(
+        pre_specified="mo@occam.ai",
+        time_on_task=10
+    )
+
+    base_hitl = Params(
+        agent_email="mark@occam.ai",
+        agent_name="mark"
+    )
+
+
+    agent_params = EmailCommunicatorParamsModel(
+        **partial_params.model_dump(),
+        email_communicator_card=EmailCommunicatorCardModel(
+            email="john.doe@example.com",
+            first_name="John",
+            last_name="Doe",
+            company="Example Inc.",
+            role="CEO",
+        ),
+        supervisor_card=SupervisorCardModel(
+            email="john.doe@example.com",
+            first_name="John",
+            last_name="Doe",
+            company="Example Inc.",
+            role="CEO",
+        ),
+    )
 
     # Create a new agent instance
     agent_instantiation_response = client.agents.instantiate_agent(
         agent_name=agent_name,
-        agent_params_model=params_model(
-            **partial_params.model_dump(),
-        )
+        agent_params=agent_params
     )
     agent_instance_id = list(agent_instantiation_response.keys())[0]
     agent_identity = list(agent_instantiation_response.values())[0]
@@ -55,7 +90,8 @@ if __name__ == "__main__":
         agent_instance_id=agent_instance_id,
         agent_input_model=AgentIOModel(
             query="What is the weather in Tokyo?",
-        )
+        ),
+        sync=False
     )
 
     # Check status
