@@ -5,7 +5,7 @@ from urllib.parse import quote
 from occam_core.agents.model import AgentIdentityCoreModel, AgentIOModel
 from occam_core.util.base_models import ParamsIOModel
 
-from occam_sdk.util import (AgentFetchError, AgentInstanceFetchError,
+from occam_sdk.util import (AgentFetchError, AgentInstanceFetchError, AgentInstanceMetadata,
                             AgentInstantiationError, AgentRunDetail)
 
 
@@ -54,7 +54,7 @@ class AgentsApi:
             return AgentFetchError.model_validate(identity_dict)
         return AgentIdentityCoreModel.model_validate(identity_dict)
 
-    def instantiate_agent(self, agent_name: str, agent_params_model: ParamsIOModel) -> Dict[str, AgentIdentityCoreModel] | AgentInstantiationError:
+    def instantiate_agent(self, agent_name: str, agent_params_model: ParamsIOModel) -> AgentInstanceMetadata | AgentInstantiationError:
         """
         Corresponds to POST /agents/{agent_name}/create
         Creates an instance of an agent.
@@ -69,7 +69,7 @@ class AgentsApi:
         response_dict = resp.json()
         if "error_type" in response_dict:
             return AgentInstantiationError.model_validate(response_dict)
-        return {response_dict["agent_instance_id"]: AgentIdentityCoreModel.model_validate(response_dict["agent_identity"])}
+        return AgentInstanceMetadata.model_validate(response_dict)
 
     def run_agent(self, agent_instance_id: str, agent_input_model: AgentIOModel) -> AgentRunDetail | AgentInstanceFetchError:
         """
