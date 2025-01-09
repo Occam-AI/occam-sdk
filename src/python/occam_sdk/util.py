@@ -40,4 +40,5 @@ class AgentInstanceFetchError(BaseModel):
 
 
 class AgentRunDetail(BaseModel):
+    agent_run_instance_id: str
     status: str
