@@ -73,8 +73,13 @@ class AgentsApi:
         if "error_type" in response_dict:
             return AgentSetupError.model_validate(response_dict)
         return AgentInstanceMetadata.model_validate(response_dict)
-
-    def run_agent(self, agent_instance_id: str, agent_input_model: AgentIOModel, sync: bool = True) -> AgentRunDetail | AgentSetupError:
+ 
+    def run_agent(
+            self,
+            agent_instance_id: str,
+            agent_input_model: AgentIOModel,
+            sync: bool = True
+    ) -> AgentRunDetail | AgentSetupError:
         """
         Corresponds to POST /agents/{agent_instance_id}/run
         Runs the specified agent instance with provided input.
@@ -91,6 +96,7 @@ class AgentsApi:
         if sync:
             while self.get_agent_run_status(agent_run_instance_id=agent_instance_id).status != "completed":
                 time.sleep(1)
+            return self.get_agent_run_result(agent_run_instance_id=agent_instance_id)
         return AgentRunDetail.model_validate(response_dict)
 
     def get_agent_run_status(self, agent_run_instance_id: str) -> AgentRunDetail | AgentSetupError:
