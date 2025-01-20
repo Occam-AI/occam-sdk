@@ -1,12 +1,14 @@
 import time
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
+from urllib.parse import quote
 
 import requests
 from urllib.parse import quote
 from occam_core.agents.model import AgentIdentityCoreModel, AgentIOModel
-from occam_core.api_util import (AgentInstanceMetadata, AgentRunDetail,
-                                 AgentSetupError)
+from occam_core.api_util import (AgentHandlingError, AgentInstanceMetadata,
+                                 AgentRunDetail, AgentRunStatus)
 from occam_core.util.base_models import ParamsIOModel
+from occam_sdk.util import AgentAction
 
 from occam_sdk.util import (AgentFetchError, AgentInstanceFetchError, AgentInstanceMetadata,
                             AgentInstantiationError, AgentRunDetail)
@@ -42,7 +44,7 @@ class AgentsApi:
         return {agent_name: AgentIdentityCoreModel.model_validate(agent_dict)
                 for agent_name, agent_dict in agent_catalogue_dict.items()}
 
-    def get_agent_metadata(self, agent_name: str) -> AgentIdentityCoreModel | AgentSetupError:
+    def get_agent_metadata(self, agent_name: str) -> AgentIdentityCoreModel | AgentHandlingError:
         """
         Corresponds to GET /agents/{agent_name}
         Returns the metadata of the specified agent.
@@ -54,24 +56,24 @@ class AgentsApi:
         resp.raise_for_status()
         identity_dict = resp.json()
         if "error_message" in identity_dict:
-            return AgentSetupError.model_validate(identity_dict)
+            return AgentHandlingError.model_validate(identity_dict)
         return AgentIdentityCoreModel.model_validate(identity_dict)
 
-    def instantiate_agent(self, agent_name: str, agent_params: ParamsIOModel) -> AgentInstanceMetadata | AgentSetupError:
+    def instantiate_agent(self, agent_name: str, agent_params: ParamsIOModel) -> AgentInstanceMetadata | AgentHandlingError:
         """
         Corresponds to POST /agents/{agent_name}/create
         Creates an instance of an agent.
         """
-        if not isinstance(agent_params_model, ParamsIOModel):
+        if not isinstance(agent_params, ParamsIOModel):
             raise ValueError("agent_params_model must be an instance of ParamsIOModel")
         encoded_name = quote(agent_name, safe='')
         url = f"{self._base_url}/agents/{encoded_name}/instantiate"
-        agent_params = agent_params_model.model_dump()
+        agent_params = agent_params.model_dump()
         resp = requests.post(url, headers=self._headers(), json=agent_params, timeout=10)
         resp.raise_for_status()
         response_dict = resp.json()
         if "error_type" in response_dict:
-            return AgentSetupError.model_validate(response_dict)
+            return AgentHandlingError.model_validate(response_dict)
         return AgentInstanceMetadata.model_validate(response_dict)
  
     def run_agent(
@@ -79,7 +81,7 @@ class AgentsApi:
             agent_instance_id: str,
             agent_input_model: AgentIOModel,
             sync: bool = True
-    ) -> AgentRunDetail | AgentSetupError:
+    ) -> AgentRunDetail | AgentHandlingError:
         """
         Corresponds to POST /agents/{agent_instance_id}/run
         Runs the specified agent instance with provided input.
@@ -92,41 +94,75 @@ class AgentsApi:
         resp.raise_for_status()
         response_dict = resp.json()
         if "error_type" in response_dict:
-            return AgentSetupError.model_validate(response_dict)
+            return AgentHandlingError.model_validate(response_dict)
         if sync:
-            while self.get_agent_run_status(agent_run_instance_id=agent_instance_id).status != "completed":
+            run_detail = None
+            while run_detail is None or run_detail.status != AgentRunStatus.COMPLETED:
                 time.sleep(1)
-            return self.get_agent_run_result(agent_run_instance_id=agent_instance_id)
-        return AgentRunDetail.model_validate(response_dict)
+                run_detail = self.get_agent_run_detail(agent_run_instance_id=agent_instance_id)
+        else:
+            run_detail = AgentRunDetail.model_validate(response_dict)
+        return run_detail
 
-    def get_agent_run_status(self, agent_run_instance_id: str) -> AgentRunDetail | AgentSetupError:
+    def get_agent_run_detail(self, agent_run_instance_id: str) -> AgentRunDetail | AgentHandlingError:
         """
         Corresponds to GET /agents/run/{agent_run_instance_id}/status
         Returns the status of the specified agent run.
         """
         url = f"{self._base_url}/agents/{agent_run_instance_id}/run/status"
-        resp = requests.post(url, headers=self._headers(), timeout=10)
+        resp = requests.get(url, headers=self._headers(), timeout=10)
         resp.raise_for_status()
         response_dict = resp.json()
         if "error_type" in response_dict:
-            return AgentInstanceFetchError.model_validate(response_dict)
-        response_dict["agent_run_instance_id"] = agent_run_instance_id
+            return AgentHandlingError.model_validate(response_dict)
         return AgentRunDetail.model_validate(response_dict)
 
-    def get_agent_run_result(self, agent_run_instance_id: str) -> AgentIOModel | AgentSetupError:
+    def list_running_agents(self) -> List[AgentRunDetail]:
         """
-        Corresponds to GET /agents/run/{agent_run_instance_id}/result
-        Returns the results of the specified agent run.
+        Corresponds to GET /agents/runs
+        Returns a list of all running agents.
         """
-        url = f"{self._base_url}/agents/{agent_run_instance_id}/run/result"
+        url = f"{self._base_url}/agents/runs"
+        resp = requests.get(url, headers=self._headers(), timeout=10)
+        resp.raise_for_status()
+        return [AgentRunDetail.model_validate(agent_dict) for agent_dict in resp.json()]
+
+    def manage_agent(self, agent_run_instance_id: str, action: AgentAction, sync: bool = True) -> AgentRunDetail | AgentHandlingError:
+        """
+        Corresponds to POST /agents/runs/{agent_run_instance_id}/{action}
+
+        where action is one of:
+        - pause
+        - resume
+        - terminate
+        """
+        end_states = {
+            AgentRunStatus.TERMINATED,
+            AgentRunStatus.FAILED,
+            AgentRunStatus.COMPLETED
+        }
+        sync_exit_switch = {
+            AgentAction.PAUSE: AgentRunStatus.PAUSED,
+            AgentAction.RESUME: AgentRunStatus.RUNNING
+        }
+
+        url = f"{self._base_url}/agents/runs/{agent_run_instance_id}/{action.value}"
         resp = requests.post(url, headers=self._headers(), timeout=10)
         resp.raise_for_status()
-
         response_dict = resp.json()
         if "error_type" in response_dict:
-            return AgentSetupError.model_validate(response_dict)
-        return AgentIOModel.model_validate(response_dict)
-
+            return AgentHandlingError.model_validate(response_dict)
+        if sync:
+            run_detail = None
+            while run_detail is None or (
+                run_detail.status != sync_exit_switch.get(action)
+                and run_detail.status not in end_states
+            ):
+                time.sleep(1)
+                run_detail = self.get_agent_run_detail(agent_run_instance_id=agent_run_instance_id)
+        else:
+            run_detail = AgentRunDetail.model_validate(response_dict)
+        return run_detail
 
 class OccamClient:
     """
