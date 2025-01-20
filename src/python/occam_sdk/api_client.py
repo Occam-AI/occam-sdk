@@ -102,10 +102,10 @@ class AgentsApi:
 
     def get_agent_run_detail(self, agent_run_instance_id: str) -> AgentRunDetail | AgentHandlingError:
         """
-        Corresponds to GET /agents/run/{agent_run_instance_id}/status
-        Returns the status of the specified agent run.
+        Corresponds to GET /agents/run/{agent_run_instance_id}/detail
+        Returns the detail of the specified agent run.
         """
-        url = f"{self._base_url}/agents/{agent_run_instance_id}/run/status"
+        url = f"{self._base_url}/agents/runs/{agent_run_instance_id}/detail"
         resp = requests.get(url, headers=self._headers(), timeout=10)
         resp.raise_for_status()
         response_dict = resp.json()
