@@ -1,8 +1,10 @@
 
 import os
+import time
 from typing import Dict
 
 from occam_core.agents.model import AgentIdentityCoreModel, AgentIOModel
+from occam_core.api_util import AgentRunStatus
 from occam_core.model_catalogue import PARAMS_MODEL_CATALOGUE
 from occam_sdk.api_client import OccamClient
 
@@ -16,7 +18,6 @@ def _select_agent(catalogue: Dict[str, AgentIdentityCoreModel]) -> str:
 
 # 1. support streaming
 # 2. hide partial params and figure out how to share params of agents.
-# 3. new end-points: terminate-agent, pause-agent, resume-agent, list-running-agents etc.
 
 
 if __name__ == "__main__":
@@ -69,11 +70,14 @@ if __name__ == "__main__":
     )
 
     # Check status
-    run_status = client.agents.get_agent_run_status(agent_run.agent_run_instance_id)
+    run_status = client.agents.get_agent_run_detail(agent_run.agent_run_instance_id)
     print(f"Run status: {run_status}")
     print("==================")
-    # Get run result
-    run_result = client.agents.get_agent_run_result(agent_run.agent_run_instance_id)
+
+    while run_status.status != AgentRunStatus.COMPLETED:
+        time.sleep(1)
+        run_status = client.agents.get_agent_run_detail(agent_run.agent_run_instance_id)
+        print(f"Run status: {run_status}")
 
     print("Run result:")
-    print(run_result)
+    print(run_status.result)
