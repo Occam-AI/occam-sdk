@@ -8,6 +8,7 @@ from occam_core.agents.model import AgentIdentityCoreModel, AgentIOModel
 from occam_core.api_util import (AgentHandlingError, AgentInstanceMetadata,
                                  AgentRunDetail, AgentRunStatus)
 from occam_core.util.base_models import ParamsIOModel
+from occam_sdk.util import AgentAction
 
 from occam_sdk.util import (AgentFetchError, AgentInstanceFetchError, AgentInstanceMetadata,
                             AgentInstantiationError, AgentRunDetail)
@@ -98,44 +99,18 @@ class AgentsApi:
             run_detail = None
             while run_detail is None or run_detail.status != AgentRunStatus.COMPLETED:
                 time.sleep(1)
-                run_detail = self.get_agent_run_status(agent_run_instance_id=agent_instance_id)
+                run_detail = self.get_agent_run_detail(agent_run_instance_id=agent_instance_id)
         else:
             run_detail = AgentRunDetail.model_validate(response_dict)
         return run_detail
 
-    def get_agent_run_status(self, agent_run_instance_id: str) -> AgentRunDetail | AgentHandlingError:
+    def get_agent_run_detail(self, agent_run_instance_id: str) -> AgentRunDetail | AgentHandlingError:
         """
         Corresponds to GET /agents/run/{agent_run_instance_id}/status
         Returns the status of the specified agent run.
         """
         url = f"{self._base_url}/agents/{agent_run_instance_id}/run/status"
-        resp = requests.post(url, headers=self._headers(), timeout=10)
-        resp.raise_for_status()
-        response_dict = resp.json()
-        if "error_type" in response_dict:
-            return AgentHandlingError.model_validate(response_dict)
-        return AgentRunDetail.model_validate(response_dict)
-
-    def pause_agent(self, agent_run_instance_id: str) -> AgentRunDetail | AgentHandlingError:
-        """
-        Corresponds to POST /agents/runs/{agent_run_instance_id}/pause
-        Pauses the specified agent run.
-        """
-        url = f"{self._base_url}/agents/runs/{agent_run_instance_id}/pause"
-        resp = requests.post(url, headers=self._headers(), timeout=10)
-        resp.raise_for_status()
-        response_dict = resp.json()
-        if "error_type" in response_dict:
-            return AgentHandlingError.model_validate(response_dict)
-        return AgentRunDetail.model_validate(response_dict)
-
-    def terminate_agent(self, agent_run_instance_id: str) -> AgentRunDetail | AgentHandlingError:
-        """
-        Corresponds to POST /agents/runs/{agent_run_instance_id}/terminate
-        Terminates the specified agent run.
-        """
-        url = f"{self._base_url}/agents/runs/{agent_run_instance_id}/terminate"
-        resp = requests.post(url, headers=self._headers(), timeout=10)
+        resp = requests.get(url, headers=self._headers(), timeout=10)
         resp.raise_for_status()
         response_dict = resp.json()
         if "error_type" in response_dict:
@@ -152,6 +127,42 @@ class AgentsApi:
         resp.raise_for_status()
         return [AgentRunDetail.model_validate(agent_dict) for agent_dict in resp.json()]
 
+    def manage_agent(self, agent_run_instance_id: str, action: AgentAction, sync: bool = True) -> AgentRunDetail | AgentHandlingError:
+        """
+        Corresponds to POST /agents/runs/{agent_run_instance_id}/{action}
+
+        where action is one of:
+        - pause
+        - resume
+        - terminate
+        """
+        end_states = {
+            AgentRunStatus.TERMINATED,
+            AgentRunStatus.FAILED,
+            AgentRunStatus.COMPLETED
+        }
+        sync_exit_switch = {
+            AgentAction.PAUSE: AgentRunStatus.PAUSED,
+            AgentAction.RESUME: AgentRunStatus.RUNNING
+        }
+
+        url = f"{self._base_url}/agents/runs/{agent_run_instance_id}/{action.value}"
+        resp = requests.post(url, headers=self._headers(), timeout=10)
+        resp.raise_for_status()
+        response_dict = resp.json()
+        if "error_type" in response_dict:
+            return AgentHandlingError.model_validate(response_dict)
+        if sync:
+            run_detail = None
+            while run_detail is None or (
+                run_detail.status != sync_exit_switch.get(action)
+                and run_detail.status not in end_states
+            ):
+                time.sleep(1)
+                run_detail = self.get_agent_run_detail(agent_run_instance_id=agent_run_instance_id)
+        else:
+            run_detail = AgentRunDetail.model_validate(response_dict)
+        return run_detail
 
 class OccamClient:
     """
