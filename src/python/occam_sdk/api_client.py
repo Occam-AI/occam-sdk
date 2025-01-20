@@ -61,7 +61,7 @@ class AgentsApi:
 
     def instantiate_agent(self, agent_name: str, agent_params: ParamsIOModel) -> AgentInstanceMetadata | AgentHandlingError:
         """
-        Corresponds to POST /agents/{agent_name}/create
+        Corresponds to POST /agents/{agent_name}/instantiate
         Creates an instance of an agent.
         """
         if not isinstance(agent_params, ParamsIOModel):
@@ -83,12 +83,12 @@ class AgentsApi:
             sync: bool = True
     ) -> AgentRunDetail | AgentHandlingError:
         """
-        Corresponds to POST /agents/{agent_instance_id}/run
+        Corresponds to POST /agents/run/{agent_instance_id}
         Runs the specified agent instance with provided input.
         """
         if not isinstance(agent_input_model, AgentIOModel):
             raise ValueError("agent_input_model must be an instance of AgentIOModel")
-        url = f"{self._base_url}/agents/{agent_instance_id}/run"
+        url = f"{self._base_url}/agents/run/{agent_instance_id}"
         agent_input = {"inputs": agent_input_model.model_dump()}
         resp = requests.post(url, headers=self._headers(), json=agent_input, timeout=10)
         resp.raise_for_status()
@@ -109,7 +109,7 @@ class AgentsApi:
         Corresponds to GET /agents/run/{agent_run_instance_id}/detail
         Returns the detail of the specified agent run.
         """
-        url = f"{self._base_url}/agents/runs/{agent_run_instance_id}/detail"
+        url = f"{self._base_url}/agents/run/{agent_run_instance_id}/detail"
         resp = requests.get(url, headers=self._headers(), timeout=10)
         resp.raise_for_status()
         response_dict = resp.json()
@@ -117,19 +117,9 @@ class AgentsApi:
             return AgentHandlingError.model_validate(response_dict)
         return AgentRunDetail.model_validate(response_dict)
 
-    def list_running_agents(self) -> List[AgentRunDetail]:
-        """
-        Corresponds to GET /agents/runs
-        Returns a list of all running agents.
-        """
-        url = f"{self._base_url}/agents/runs"
-        resp = requests.get(url, headers=self._headers(), timeout=10)
-        resp.raise_for_status()
-        return [AgentRunDetail.model_validate(agent_dict) for agent_dict in resp.json()]
-
     def manage_agent(self, agent_run_instance_id: str, action: AgentAction, sync: bool = True) -> AgentRunDetail | AgentHandlingError:
         """
-        Corresponds to POST /agents/runs/{agent_run_instance_id}/{action}
+        Corresponds to POST /agents/run/{agent_run_instance_id}/{action}
 
         where action is one of:
         - pause
@@ -146,7 +136,7 @@ class AgentsApi:
             AgentAction.RESUME: AgentRunStatus.RUNNING
         }
 
-        url = f"{self._base_url}/agents/runs/{agent_run_instance_id}/{action.value}"
+        url = f"{self._base_url}/agents/run/{agent_run_instance_id}/{action.value}"
         resp = requests.post(url, headers=self._headers(), timeout=10)
         resp.raise_for_status()
         response_dict = resp.json()
@@ -163,6 +153,17 @@ class AgentsApi:
         else:
             run_detail = AgentRunDetail.model_validate(response_dict)
         return run_detail
+
+    def list_running_agents(self) -> List[AgentRunDetail]:
+        """
+        Corresponds to GET /agents/runs
+        Returns a list of all running agents.
+        """
+        url = f"{self._base_url}/agents/runs"
+        resp = requests.get(url, headers=self._headers(), timeout=10)
+        resp.raise_for_status()
+        return [AgentRunDetail.model_validate(agent_dict) for agent_dict in resp.json()]
+
 
 class OccamClient:
     """
