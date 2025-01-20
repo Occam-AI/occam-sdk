@@ -1,5 +1,6 @@
 import time
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
+from urllib.parse import quote
 
 import requests
 from urllib.parse import quote
@@ -57,22 +58,22 @@ class AgentsApi:
             return AgentSetupError.model_validate(identity_dict)
         return AgentIdentityCoreModel.model_validate(identity_dict)
 
-    def instantiate_agent(self, agent_name: str, agent_params: ParamsIOModel) -> AgentInstanceMetadata | AgentSetupError:
-        """
-        Corresponds to POST /agents/{agent_name}/create
-        Creates an instance of an agent.
-        """
-        if not isinstance(agent_params_model, ParamsIOModel):
-            raise ValueError("agent_params_model must be an instance of ParamsIOModel")
-        encoded_name = quote(agent_name, safe='')
-        url = f"{self._base_url}/agents/{encoded_name}/instantiate"
-        agent_params = agent_params_model.model_dump()
-        resp = requests.post(url, headers=self._headers(), json=agent_params, timeout=10)
-        resp.raise_for_status()
-        response_dict = resp.json()
-        if "error_type" in response_dict:
-            return AgentSetupError.model_validate(response_dict)
-        return AgentInstanceMetadata.model_validate(response_dict)
+    # def instantiate_agent(self, agent_name: str, agent_params: ParamsIOModel) -> AgentInstanceMetadata | AgentSetupError:
+    #     """
+    #     Corresponds to POST /agents/{agent_name}/create
+    #     Creates an instance of an agent.
+    #     """
+    #     if not isinstance(agent_params, ParamsIOModel):
+    #         raise ValueError("agent_params_model must be an instance of ParamsIOModel")
+    #     encoded_name = quote(agent_name, safe='')
+    #     url = f"{self._base_url}/agents/{encoded_name}/instantiate"
+    #     agent_params = agent_params.model_dump()
+    #     resp = requests.post(url, headers=self._headers(), json=agent_params, timeout=10)
+    #     resp.raise_for_status()
+    #     response_dict = resp.json()
+    #     if "error_type" in response_dict:
+    #         return AgentSetupError.model_validate(response_dict)
+    #     return AgentInstanceMetadata.model_validate(response_dict)
  
     def run_agent(
             self,
@@ -126,6 +127,42 @@ class AgentsApi:
         if "error_type" in response_dict:
             return AgentSetupError.model_validate(response_dict)
         return AgentIOModel.model_validate(response_dict)
+    
+    def pause_agent(self, agent_run_instance_id: str) -> AgentRunDetail | AgentSetupError:
+        """
+        Corresponds to POST /agents/runs/{agent_run_instance_id}/pause
+        Pauses the specified agent run.
+        """
+        url = f"{self._base_url}/agents/runs/{agent_run_instance_id}/pause"
+        resp = requests.post(url, headers=self._headers(), timeout=10)
+        resp.raise_for_status()
+        response_dict = resp.json()
+        if "error_type" in response_dict:
+            return AgentSetupError.model_validate(response_dict)
+        return AgentRunDetail.model_validate(response_dict)
+    
+    def terminate_agent(self, agent_run_instance_id: str) -> AgentRunDetail | AgentSetupError:
+        """
+        Corresponds to POST /agents/runs/{agent_run_instance_id}/terminate
+        Terminates the specified agent run.
+        """
+        url = f"{self._base_url}/agents/runs/{agent_run_instance_id}/terminate"
+        resp = requests.post(url, headers=self._headers(), timeout=10)
+        resp.raise_for_status()
+        response_dict = resp.json()
+        if "error_type" in response_dict:
+            return AgentSetupError.model_validate(response_dict)
+        return AgentRunDetail.model_validate(response_dict)
+
+    def list_running_agents(self) -> List[AgentRunDetail]:
+        """
+        Corresponds to GET /agents/runs
+        Returns a list of all running agents.
+        """
+        url = f"{self._base_url}/agents/runs"
+        resp = requests.get(url, headers=self._headers(), timeout=10)
+        resp.raise_for_status()
+        return [AgentRunDetail.model_validate(agent_dict) for agent_dict in resp.json()]
 
 
 class OccamClient:
