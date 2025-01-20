@@ -58,22 +58,22 @@ class AgentsApi:
             return AgentSetupError.model_validate(identity_dict)
         return AgentIdentityCoreModel.model_validate(identity_dict)
 
-    # def instantiate_agent(self, agent_name: str, agent_params: ParamsIOModel) -> AgentInstanceMetadata | AgentSetupError:
-    #     """
-    #     Corresponds to POST /agents/{agent_name}/create
-    #     Creates an instance of an agent.
-    #     """
-    #     if not isinstance(agent_params, ParamsIOModel):
-    #         raise ValueError("agent_params_model must be an instance of ParamsIOModel")
-    #     encoded_name = quote(agent_name, safe='')
-    #     url = f"{self._base_url}/agents/{encoded_name}/instantiate"
-    #     agent_params = agent_params.model_dump()
-    #     resp = requests.post(url, headers=self._headers(), json=agent_params, timeout=10)
-    #     resp.raise_for_status()
-    #     response_dict = resp.json()
-    #     if "error_type" in response_dict:
-    #         return AgentSetupError.model_validate(response_dict)
-    #     return AgentInstanceMetadata.model_validate(response_dict)
+    def instantiate_agent(self, agent_name: str, agent_params: ParamsIOModel) -> AgentInstanceMetadata | AgentSetupError:
+        """
+        Corresponds to POST /agents/{agent_name}/create
+        Creates an instance of an agent.
+        """
+        if not isinstance(agent_params, ParamsIOModel):
+            raise ValueError("agent_params_model must be an instance of ParamsIOModel")
+        encoded_name = quote(agent_name, safe='')
+        url = f"{self._base_url}/agents/{encoded_name}/instantiate"
+        agent_params = agent_params.model_dump()
+        resp = requests.post(url, headers=self._headers(), json=agent_params, timeout=10)
+        resp.raise_for_status()
+        response_dict = resp.json()
+        if "error_type" in response_dict:
+            return AgentSetupError.model_validate(response_dict)
+        return AgentInstanceMetadata.model_validate(response_dict)
  
     def run_agent(
             self,

@@ -3,9 +3,7 @@ import os
 from typing import Dict
 
 from occam_core.agents.model import AgentIdentityCoreModel, AgentIOModel
-from occam_core.model_catalogue import (PARAMS_MODEL_CATALOGUE,
-                                        EmailCommunicatorParamsModel)
-from occam_core.util.base_models import ParamsIOModel
+from occam_core.model_catalogue import PARAMS_MODEL_CATALOGUE
 from occam_sdk.api_client import OccamClient
 
 
@@ -43,33 +41,9 @@ if __name__ == "__main__":
     # partial_params = some_agent.partial_params
     params_model = PARAMS_MODEL_CATALOGUE[some_agent.params_model_name]
 
-    user_agent_params  = Params(
-        pre_specified="mo@occam.ai",
-        time_on_task=10
-    )
-
-    base_hitl = Params(
-        agent_email="mark@occam.ai",
-        agent_name="mark"
-    )
-
-
-    agent_params = EmailCommunicatorParamsModel(
-        **partial_params.model_dump(),
-        email_communicator_card=EmailCommunicatorCardModel(
-            email="john.doe@example.com",
-            first_name="John",
-            last_name="Doe",
-            company="Example Inc.",
-            role="CEO",
-        ),
-        supervisor_card=SupervisorCardModel(
-            email="john.doe@example.com",
-            first_name="John",
-            last_name="Doe",
-            company="Example Inc.",
-            role="CEO",
-        ),
+    agent_params  = params_model(
+        system_prompt="You are a helpful assistant.",
+        assistant_name="Assistant",
     )
 
     # Create a new agent instance
