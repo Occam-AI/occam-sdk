@@ -17,7 +17,6 @@ def _select_agent(catalogue: Dict[str, AgentIdentityCoreModel]) -> str:
 # NOTES: TODO: Mo/Ahmed
 
 # 1. support streaming
-# 2. hide partial params and figure out how to share params of agents.
 
 
 if __name__ == "__main__":
@@ -39,7 +38,6 @@ if __name__ == "__main__":
 
     # Get a specific agent
     some_agent = client.agents.get_agent_metadata(agent_name=agent_name)
-    # partial_params = some_agent.partial_params
     params_model = PARAMS_MODEL_CATALOGUE[some_agent.params_model_name]
 
     agent_params  = params_model(
