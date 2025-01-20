@@ -6,7 +6,7 @@ from typing import Dict
 from occam_core.agents.model import AgentIdentityCoreModel, AgentIOModel
 from occam_core.api_util import AgentRunStatus
 from occam_core.model_catalogue import PARAMS_MODEL_CATALOGUE
-from occam_sdk.api_client import OccamClient
+from occamai.api_client import OccamClient
 
 
 def _select_agent(catalogue: Dict[str, AgentIdentityCoreModel]) -> str:
