@@ -7,7 +7,7 @@ from occam_core.agents.model import AgentIdentityCoreModel, AgentIOModel
 from occam_core.api_util import (AgentHandlingError, AgentInstanceMetadata,
                                  AgentRunDetail, AgentRunStatus)
 from occam_core.util.base_models import ParamsIOModel
-from occam_sdk.util import AgentAction
+from occamai.util import AgentAction
 
 
 class AgentsApi:
