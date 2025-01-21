@@ -1,9 +1,9 @@
 [tool.poetry]
 authors = ["Mo <Mo@occam.ai>, Ahmed <ahmed@occam.ai>"]
-description = "Repo containing Occam's SDK"
-name = "occam_sdk"
+description = "Occam's SDK"
+name = "occamai"
 version = "0.1.0-alpha"
-packages = [{include = "occam_sdk", from="src/python"}]
+packages = [{include = "occamai", from="src/python"}]
 
 [tool.poetry.dependencies]
 python = "^3.11,<3.12"
