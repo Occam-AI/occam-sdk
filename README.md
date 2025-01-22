@@ -10,11 +10,33 @@ endpoints allow you to:
 5. Manage long-running jobs (pause, resume, or terminate).
 6. Track running agents and retrieve their run results.
 
-Below is a summary of the most important endpoints in the `AgentsApi` class.
+
+---
+
+## Key Concepts
+
+- **Agents**: Agents are specialized entities that operate on agent I/O data.
+These agents can be humans, to be leveraged through Occam's Agents Chat Tool,
+or AI based agents, such as a web-browser, a data querying agent or an email
+communicator. All agents have the same base IO structure of queries or chat messages
+but can also accept additional custom inputs if needed. They can be run, paused,
+resumed, terminated, and some can be communicated within in real-time where a
+dashboard is to be present for them.
+
+- **AgentIdentityCoreModel**: Defines properties for each agent, such as
+  description, contact info, or requirements.
+- **ParamsIOModel**: Used when creating new agent instances. Each agent's
+  `AgentIdentityCoreModel` references the `params_model_name` indicating which
+  parameter schema to use.
+- **AgentIOModel**: The structure for input to an agent, commonly a list of
+  messages (similar to an OpenAI chat format).
 
 ---
 
 ## Endpoints Overview
+
+Below is a summary of the most important endpoints in the `AgentsApi` class.
+
 
 1. **get_agents_catalogue**
    • Fetches a catalogue of agents accessible to you.
@@ -48,19 +70,6 @@ Below is a summary of the most important endpoints in the `AgentsApi` class.
 
 7. **list_running_agents**
    • Returns all currently running agents' `AgentRunDetail`.
-
----
-
-## Key Concepts
-
-- **Agents**: Can be automated (e.g., AI-backed) or tied to humans in the loop.
-- **AgentIdentityCoreModel**: Defines properties for each agent, such as
-  description, contact info, or requirements.
-- **ParamsIOModel**: Used when creating new agent instances. Each agent's
-  `AgentIdentityCoreModel` references the `params_model_name` indicating which
-  parameter schema to use.
-- **AgentIOModel**: The structure for input to an agent, commonly a list of
-  messages (similar to an OpenAI chat format).
 
 ---
 
