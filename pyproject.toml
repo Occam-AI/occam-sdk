@@ -1,5 +1,5 @@
 [tool.poetry]
-authors = ["Mo <Mo@occam.ai>, Ahmed <ahmed@occam.ai>"]
+authors = ["Occam AI <support@occam.ai>, Mo <Mo@occam.ai>, Ahmed <ahmed@occam.ai>"]
 description = "Occam's SDK"
 name = "occamai"
 version = "0.1.0-alpha"
