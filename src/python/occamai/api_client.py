@@ -7,7 +7,7 @@ from urllib.parse import quote
 from occam_core.agents.model import AgentIdentityCoreModel, AgentIOModel
 from occam_core.api_util import (AgentHandlingError, AgentInstanceMetadata,
                                  AgentRunDetail, AgentRunStatus)
-from occam_core.util.base_models import ParamsIOModel
+from occam_core.util.base_models import AgentInstanceParamsModel
 from occamai.util import AgentAction
 
 
