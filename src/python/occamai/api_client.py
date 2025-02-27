@@ -56,13 +56,13 @@ class AgentsApi:
             return AgentHandlingError.model_validate(identity_dict)
         return AgentIdentityCoreModel.model_validate(identity_dict)
 
-    def instantiate_agent(self, agent_name: str, agent_params: ParamsIOModel) -> AgentInstanceMetadata | AgentHandlingError:
+    def instantiate_agent(self, agent_name: str, agent_params: AgentInstanceParamsModel) -> AgentInstanceMetadata | AgentHandlingError:
         """
         Corresponds to POST /agents/{agent_name}/instantiate
         Creates an instance of an agent.
         """
-        if not isinstance(agent_params, ParamsIOModel):
-            raise ValueError("agent_params_model must be an instance of ParamsIOModel")
+        if not isinstance(agent_params, AgentInstanceParamsModel):
+            raise ValueError("agent_params_model must be an instance of AgentInstanceParamsModel")
         encoded_name = quote(agent_name, safe='')
         url = f"{self._base_url}/agents/{encoded_name}/instantiate"
         agent_params = agent_params.model_dump()
