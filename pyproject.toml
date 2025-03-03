@@ -2,7 +2,7 @@
 authors = ["Occam AI <support@occam.ai>, Mo <Mo@occam.ai>, Ahmed <ahmed@occam.ai>"]
 description = "Occam's SDK"
 name = "occamai"
-version = "0.1.0.dev8"
+version = "0.1.0.dev10"
 packages = [{include = "occamai", from="src/python"}]
 
 [tool.poetry.dependencies]
