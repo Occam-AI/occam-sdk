@@ -11,6 +11,10 @@ from occam_core.util.base_models import AgentInstanceParamsModel
 from occamai.util import AgentAction
 
 
+# Connect and read timeout in seconds
+TIMEOUT_PARAMS = (3, 30)
+
+
 class AgentsApi:
     """
     Simple wrapper for the /agents/ endpoints.
@@ -35,7 +39,7 @@ class AgentsApi:
         Returns a list of agents available to the current user.
         """
         url = f"{self._base_url}/agents"
-        resp = requests.get(url, headers=self._headers(), timeout=10)
+        resp = requests.get(url, headers=self._headers(), timeout=TIMEOUT_PARAMS)
         resp.raise_for_status()
         agent_catalogue_dict = resp.json()
         return {agent_name: AgentIdentityCoreModel.model_validate(agent_dict)
@@ -49,7 +53,7 @@ class AgentsApi:
         # Agent name might include "/" or other special characters that would mess up the URL
         encoded_agent_name = quote(agent_name, safe='')
         url = f"{self._base_url}/agents/{encoded_agent_name}"
-        resp = requests.get(url, headers=self._headers(), timeout=10)
+        resp = requests.get(url, headers=self._headers(), timeout=TIMEOUT_PARAMS)
         resp.raise_for_status()
         identity_dict = resp.json()
         if "error_message" in identity_dict:
@@ -66,7 +70,7 @@ class AgentsApi:
         encoded_name = quote(agent_name, safe='')
         url = f"{self._base_url}/agents/{encoded_name}/instantiate"
         agent_params = agent_params.model_dump()
-        resp = requests.post(url, headers=self._headers(), json=agent_params, timeout=10)
+        resp = requests.post(url, headers=self._headers(), json=agent_params, timeout=TIMEOUT_PARAMS)
         resp.raise_for_status()
         response_dict = resp.json()
         if "error_type" in response_dict:
@@ -87,7 +91,7 @@ class AgentsApi:
             raise ValueError("agent_input_model must be an instance of AgentIOModel")
         url = f"{self._base_url}/agents/run/{agent_instance_id}"
         agent_input = {"inputs": agent_input_model.model_dump()}
-        resp = requests.post(url, headers=self._headers(), json=agent_input, timeout=10)
+        resp = requests.post(url, headers=self._headers(), json=agent_input, timeout=TIMEOUT_PARAMS)
         resp.raise_for_status()
         response_dict = resp.json()
         if "error_type" in response_dict:
@@ -107,7 +111,7 @@ class AgentsApi:
         Returns the detail of the specified agent run.
         """
         url = f"{self._base_url}/agents/run/{agent_run_instance_id}/detail"
-        resp = requests.get(url, headers=self._headers(), timeout=10)
+        resp = requests.get(url, headers=self._headers(), timeout=TIMEOUT_PARAMS)
         resp.raise_for_status()
         response_dict = resp.json()
         if "error_type" in response_dict:
@@ -134,7 +138,7 @@ class AgentsApi:
         }
 
         url = f"{self._base_url}/agents/run/{agent_run_instance_id}/{action.value}"
-        resp = requests.post(url, headers=self._headers(), timeout=10)
+        resp = requests.post(url, headers=self._headers(), timeout=TIMEOUT_PARAMS)
         resp.raise_for_status()
         response_dict = resp.json()
         if "error_type" in response_dict:
@@ -157,7 +161,7 @@ class AgentsApi:
         Returns a list of all running agents.
         """
         url = f"{self._base_url}/agents/runs"
-        resp = requests.get(url, headers=self._headers(), timeout=10)
+        resp = requests.get(url, headers=self._headers(), timeout=TIMEOUT_PARAMS)
         resp.raise_for_status()
         return [AgentRunDetail.model_validate(agent_dict) for agent_dict in resp.json()]
 
@@ -194,7 +198,7 @@ class OccamClient:
         # The auth endpoint (GET /auth/access-token?key=...)
         url = f"{self._base_url}/auth/access-token"
         params = {"key": self._api_key}
-        response = requests.get(url, params=params, timeout=10)
+        response = requests.get(url, params=params, timeout=TIMEOUT_PARAMS)
 
         if response.status_code != 200:
             raise ValueError(
