@@ -2,7 +2,7 @@
 authors = ["Occam AI <support@occam.ai>, Mo <Mo@occam.ai>, Ahmed <ahmed@occam.ai>"]
 description = "Occam's SDK"
 name = "occamai"
-version = "0.1.0.dev11"
+version = "0.1.0.dev12"
 packages = [{include = "occamai", from="src/python"}]
 
 [tool.poetry.dependencies]
@@ -10,7 +10,7 @@ python = "^3.11,<3.12"
 pydantic="^2.6.4"
 openai="^1.6.1"
 requests="^2.31.0"
-occam-core = "^0.1.0.dev9"
+occam-core = "^0.1.0.dev10"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "7.2.2"
