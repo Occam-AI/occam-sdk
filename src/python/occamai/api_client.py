@@ -98,7 +98,7 @@ class AgentsApi:
             return AgentHandlingError.model_validate(response_dict)
         if sync:
             run_detail = None
-            while run_detail is None or run_detail.status != AgentRunStatus.COMPLETED:
+            while run_detail is None or run_detail.status != AgentRunStatus.BATCH_COMPLETED:
                 time.sleep(1)
                 run_detail = self.get_agent_run_detail(agent_run_instance_id=agent_instance_id)
         else:
@@ -128,9 +128,8 @@ class AgentsApi:
         - terminate
         """
         end_states = {
-            AgentRunStatus.TERMINATED,
             AgentRunStatus.FAILED,
-            AgentRunStatus.COMPLETED
+            AgentRunStatus.BATCH_COMPLETED
         }
         sync_exit_switch = {
             AgentAction.PAUSE: AgentRunStatus.PAUSED,
