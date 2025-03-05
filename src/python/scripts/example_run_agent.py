@@ -72,7 +72,7 @@ if __name__ == "__main__":
     print(f"Run status: {run_status}")
     print("==================")
 
-    while run_status.status != AgentRunStatus.COMPLETED:
+    while run_status.status != AgentRunStatus.BATCH_COMPLETED:
         time.sleep(1)
         run_status = client.agents.get_agent_run_detail(agent_run.agent_run_instance_id)
         print(f"Run status: {run_status}")
