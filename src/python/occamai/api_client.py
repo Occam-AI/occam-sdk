@@ -1,5 +1,5 @@
 import time
-from typing import Any, Dict, List, Optional
+from typing import Dict, List, Optional
 from urllib.parse import quote
 
 import requests
@@ -8,7 +8,7 @@ from occam_core.agents.model import AgentIdentityCoreModel, AgentIOModel
 from occam_core.api_util import (AgentHandlingError, AgentInstanceMetadata,
                                  AgentRunDetail, AgentRunStatus)
 from occam_core.util.base_models import AgentInstanceParamsModel
-from occamai.util import AgentAction
+from occamai.util import AgentAction, authenticate_with_occam_api, retry_once_on_unauthorized
 
 
 class AgentsApi:
@@ -16,8 +16,9 @@ class AgentsApi:
     Simple wrapper for the /agents/ endpoints.
     """
 
-    def __init__(self, base_url: str, access_token: str):
+    def __init__(self, base_url: str, api_key: str, access_token: str):
         self._base_url = base_url
+        self._api_key = api_key
         self._access_token = access_token
 
     def _headers(self) -> Dict[str, str]:
@@ -29,6 +30,7 @@ class AgentsApi:
             "Content-Type": "application/json",
         }
 
+    @retry_once_on_unauthorized
     def get_agents_catalogue(self) -> Dict[str, AgentIdentityCoreModel]:
         """
         Corresponds to GET /agents
@@ -41,6 +43,7 @@ class AgentsApi:
         return {agent_name: AgentIdentityCoreModel.model_validate(agent_dict)
                 for agent_name, agent_dict in agent_catalogue_dict.items()}
 
+    @retry_once_on_unauthorized
     def get_agent_metadata(self, agent_name: str) -> AgentIdentityCoreModel | AgentHandlingError:
         """
         Corresponds to GET /agents/{agent_name}
@@ -56,6 +59,7 @@ class AgentsApi:
             return AgentHandlingError.model_validate(identity_dict)
         return AgentIdentityCoreModel.model_validate(identity_dict)
 
+    @retry_once_on_unauthorized
     def instantiate_agent(self, agent_name: str, agent_params: AgentInstanceParamsModel) -> AgentInstanceMetadata | AgentHandlingError:
         """
         Corresponds to POST /agents/{agent_name}/instantiate
@@ -72,7 +76,8 @@ class AgentsApi:
         if "error_type" in response_dict:
             return AgentHandlingError.model_validate(response_dict)
         return AgentInstanceMetadata.model_validate(response_dict)
- 
+
+    @retry_once_on_unauthorized
     def run_agent(
             self,
             agent_instance_id: str,
@@ -101,6 +106,7 @@ class AgentsApi:
             run_detail = AgentRunDetail.model_validate(response_dict)
         return run_detail
 
+    @retry_once_on_unauthorized
     def get_agent_run_detail(self, agent_run_instance_id: str) -> AgentRunDetail | AgentHandlingError:
         """
         Corresponds to GET /agents/run/{agent_run_instance_id}/detail
@@ -114,6 +120,7 @@ class AgentsApi:
             return AgentHandlingError.model_validate(response_dict)
         return AgentRunDetail.model_validate(response_dict)
 
+    @retry_once_on_unauthorized
     def manage_agent(self, agent_run_instance_id: str, action: AgentAction, sync: bool = True) -> AgentRunDetail | AgentHandlingError:
         """
         Corresponds to POST /agents/run/{agent_run_instance_id}/{action}
@@ -151,6 +158,7 @@ class AgentsApi:
             run_detail = AgentRunDetail.model_validate(response_dict)
         return run_detail
 
+    @retry_once_on_unauthorized
     def list_running_agents(self) -> List[AgentRunDetail]:
         """
         Corresponds to GET /agents/runs
@@ -184,28 +192,7 @@ class OccamClient:
         self._agents_api: Optional["AgentsApi"] = None
 
         # Attempt authentication immediately so we fail fast if invalid
-        self._authenticate()
-
-    def _authenticate(self) -> None:
-        """
-        Perform auth using the provided API key.
-        Raises an exception if the key is invalid.
-        """
-        # The auth endpoint (GET /auth/access-token?key=...)
-        url = f"{self._base_url}/auth/access-token"
-        params = {"key": self._api_key}
-        response = requests.get(url, params=params, timeout=10)
-
-        if response.status_code != 200:
-            raise ValueError(
-                f"Authentication failed. Check API key. "
-                f"Status code: {response.status_code}. "
-                f"Details: {response.text}"
-            )
-
-        data = response.json()
-        self._access_token = data["access_token"]
-        self._expires_at = data.get("expires_at")  # In case you want to handle token exp later
+        self._access_token, self._expires_at = authenticate_with_occam_api(base_url=self._base_url, api_key=self._api_key)
 
     @property
     def agents(self) -> AgentsApi:
@@ -219,5 +206,5 @@ class OccamClient:
             client.agents.get_agent_run_result("xxxx")
         """
         if self._agents_api is None:
-            self._agents_api = AgentsApi(base_url=self._base_url, access_token=self._access_token)
+            self._agents_api = AgentsApi(base_url=self._base_url, api_key=self._api_key, access_token=self._access_token)
         return self._agents_api
