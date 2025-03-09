@@ -2,7 +2,7 @@
 authors = ["Occam AI <support@occam.ai>, Mo <Mo@occam.ai>, Ahmed <ahmed@occam.ai>"]
 description = "Occam's SDK"
 name = "occamai"
-version = "0.1.0.dev7"
+version = "0.1.0.dev13"
 packages = [{include = "occamai", from="src/python"}]
 
 [tool.poetry.dependencies]
@@ -10,7 +10,7 @@ python = "^3.11,<3.12"
 pydantic="^2.6.4"
 openai="^1.6.1"
 requests="^2.31.0"
-occam-core = "^0.1.0.dev6"
+occam-core = "^0.1.0.dev11"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "7.2.2"
@@ -22,7 +22,7 @@ coverage = "^7.4.4"
 # This was moved here since the non-dev dependency has to reference pypi
 # for publishing. For local development, use poetry update --with dev
 # to install from git.
-occam-core = {git = "ssh://git@github.com/Occam-AI/occam-core.git", branch = "main"}
+occam-core = {git = "ssh://git@github.com/Occam-AI/occam-core.git", branch = "agent-runs"}
 
 [build-system]
 build-backend = "poetry.core.masonry.api"
